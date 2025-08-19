@@ -46,17 +46,17 @@ public class CustomerShoppingTest {
 
     @BeforeEach
     void setUp(){
-        //CustomerShoppingHandler를 테스트 하기위해서 의존관계에 있는 enteringQueue,productService,checkoutChannel mock를 생성 합니다.
+        //CustomerShoppingHandler를 테스트하기 위해서 의존 관계에 있는 enteringQueue, productService, checkoutChannel mock을 생성합니다.
         enteringQueue = Mockito.mock(EnteringQueue.class);
         productService = Mockito.mock(ProductServiceImpl.class);
         checkoutChannel = Mockito.mock(RequestChannel.class);
 
         customerShoppingHandler = new CustomerShoppingHandler(enteringQueue,productService,checkoutChannel);
 
-        //getTotalCount()호출하면 5가 응답 되도록 설정 합니다., getTotalCount()는 제품의 전체 개수 입니다.
+        //getTotalCount() 호출하면 5가 응답되도록 설정합니다. getTotalCount()는 제품의 전체 개수입니다.
         Mockito.when(productService.getTotalCount()).thenReturn(5l);
 
-        //getProduct() method를 호출하면 호출되는 count의 횟수를 index로 사용하여 productList의 product를 반환 합니다.
+        //getProduct() 메소드를 호출하면 호출되는 count의 횟수를 index로 사용하여 productList의 product를 반환합니다.
 
         Mockito.when(productService.getProduct(anyLong())).thenAnswer(new Answer<Product>() {
 
@@ -101,13 +101,13 @@ public class CustomerShoppingTest {
         methodOptional.get().setAccessible(true);
         methodOptional.get().invoke(customerShoppingHandler);
 
-        //쇼핑 후 장바구니에 제품이 담긴다.
+        //쇼핑 후 장바구니에 제품이 담깁니다.
         log.debug("cart item size : {} ", CartLocal.getCart().getCartItems().size());
 
-        //카트에 담긴 제품 수 - CartLocal.getCart().getCartItems().size() > 0 검증 합니다.
+        //카트에 담긴 제품 수 - CartLocal.getCart().getCartItems().size() > 0 검증합니다.
         Assertions.assertTrue(CartLocal.getCart().getCartItems().size()>0);
 
-        //제품을 들어서 카트에 담는다. -> 즉 제품의 수량 감소
+        //제품을 들어서 카트에 담습니다. -> 즉 제품의 수량 감소
         Mockito.verify(productService,Mockito.atLeast(1)).pickProduct(anyLong(),anyInt());
 
     }
@@ -118,7 +118,7 @@ public class CustomerShoppingTest {
 
         CartLocal.initialize(new Customer(1l,"NHN아카데미1",100_0000));
 
-        /*product id가 1인 제품을 장바구니에 추가 합니다. 수량은 5로 설정 합니다.
+        /*product id가 1인 제품을 장바구니에 추가합니다. 수량은 5로 설정합니다.
           - new CartItem()
         */
         CartLocal.getCart().tryAddItem(new CartItem(1l,5));
@@ -136,11 +136,11 @@ public class CustomerShoppingTest {
                 .filter(o->o.getProductId()==1l)
                 .findFirst();
 
-         //productOptional.get().getQuantity() 호출 후 수량이 5인지 검증 합니다.
+         //productOptional.get().getQuantity() 호출 후 수량이 5인지 검증합니다.
          // - id가 1인 product는 이미 장바구니에 존재하고 있어 추가되지 않습니다.
         Assertions.assertEquals(5,productOptional.get().getQuantity());
 
-        //제품을 들어서 카트에 담는다. -> 즉 제품의 수량 감소, pickProduct()를 최소 1회 이상 실행하는지 검증 합니다.
+        //제품을 들어서 카트에 담습니다. -> 즉 제품의 수량 감소, pickProduct()를 최소 1회 이상 실행하는지 검증합니다.
         Mockito.verify(productService,Mockito.atLeast(1)).pickProduct(anyLong(),anyInt());
     }
 }

@@ -39,17 +39,17 @@ public class ThreadPool {
     }
 
     public ThreadPool(int poolSize, Runnable runnable) {
-        //thread pool size <0 다면 IllegalArgumentException이 발생 합니다.
+        //thread pool size < 0이면 IllegalArgumentException이 발생합니다.
         if(poolSize<0){
             throw new IllegalArgumentException();
         }
 
-        //runable == null 이면 IllegalArgumentException 발생 합니다.
+        //runnable == null이면 IllegalArgumentException이 발생합니다.
         if(Objects.isNull(runnable)){
             throw new IllegalArgumentException();
         }
 
-        //runnable 이 Runnable의 구현체가 아니라면 IllegalArgumentException 발생 합니다.
+        //runnable이 Runnable의 구현체가 아니라면 IllegalArgumentException이 발생합니다.
         if(!(runnable instanceof Runnable)){
             throw new IllegalArgumentException();
         }
@@ -59,7 +59,7 @@ public class ThreadPool {
         this.runnable = runnable;
         threadList = new ArrayList<>(poolSize);
 
-        //thread를 미리 poolSize만큼 생성 합니다.
+        //thread를 미리 poolSize만큼 생성합니다.
         createThread();
     }
 
@@ -72,7 +72,7 @@ public class ThreadPool {
     }
 
     public synchronized void start(){
-        /*생성된 thread를 시작 합니다.*/
+        /*생성된 thread를 시작합니다.*/
         for(int i=0; i<poolSize; i++){
             Thread thread = threadList.get(i);
             thread.start();
@@ -80,8 +80,8 @@ public class ThreadPool {
     }
 
     public synchronized void stop(){
-        /*interrupt()를 실행해서 thread를 종료 합니다.
-            - thread가 종료되는 과정에서 동기화 되어야 합니다.
+        /*interrupt()를 실행해서 thread를 종료합니다.
+            - thread가 종료되는 과정에서 동기화되어야 합니다.
             - 우선 모든 thread interrupt 호출
          */
 
@@ -91,10 +91,10 @@ public class ThreadPool {
             }
         }
 
-        //join()를 이용해서 모든 thread가 종료될 떄 까지 대기 상태로 만듭니다.
+        //join()을 이용해서 모든 thread가 종료될 때까지 대기 상태로 만듭니다.
         for(Thread thread : threadList){
             try {
-                //join method는 해당 thread가 종료될 때 까지 현재 thread를 대기상태로 만듭니다.
+                //join method는 해당 thread가 종료될 때까지 현재 thread를 대기상태로 만듭니다.
                 thread.join();
             } catch (InterruptedException e) {
                 //join method는 InterruptedException을 발생시킬 수 있습니다.

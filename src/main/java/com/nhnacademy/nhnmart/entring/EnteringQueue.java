@@ -38,19 +38,19 @@ public class EnteringQueue {
     }
 
     public EnteringQueue(int capacity) {
-        //capacity <=0 IllegalArgumentException이 발생 합니다.
+        //capacity <= 0이면 IllegalArgumentException이 발생합니다.
         if(capacity <= 0){
             throw new IllegalArgumentException();
         }
 
-        //capacity 와 queue를 초기화 합니다.
+        //capacity와 queue를 초기화합니다.
         this.capacity = capacity;
         queue = new LinkedList<>();
     }
 
     public synchronized void addCustomer(Customer customer){
-        /*대기열에 고객을 추가하는 method를 구현 합니다.
-           - queue.size() >= capacity 이면 대기할 수 있도록 구현합니다.
+        /*대기열에 고객을 추가하는 method를 구현합니다.
+           - queue.size() >= capacity이면 대기할 수 있도록 구현합니다.
         */
 
         while(queue.size() >= capacity){
@@ -68,7 +68,7 @@ public class EnteringQueue {
     }
 
     public synchronized Customer getCustomer(){
-        //queue가 비워져 있다면 대기 합니다.
+        //queue가 비워져 있다면 대기합니다.
         while (queue.isEmpty()){
             try {
                 wait();
@@ -77,12 +77,12 @@ public class EnteringQueue {
             }
         }
 
-        //queue 에서 customer를 반납 합니다, 대기하고 있던 thread를 깨웁니다.
+        //queue에서 customer를 반환합니다, 대기하고 있던 thread를 깨웁니다.
         notifyAll();
         return queue.poll();
     }
 
-    //queue size를 반환 합니다.
+    //queue size를 반환합니다.
     public int getQueueSize(){
         return queue.size();
     }

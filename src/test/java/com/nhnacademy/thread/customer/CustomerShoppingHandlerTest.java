@@ -59,8 +59,8 @@ class CustomerShoppingHandlerTest {
     void constructorTest1(){
         //EnteringQueue enteringQueue, ProductService productService, RequestChannel checkoutChannel null check
 
-        //CustomerShoppingHandler객체가 생성될 때 parameter의 null 여부를 검증하는 코드를 작성하세요
-        //-enteringQueue, productService, checkoutChannel
+        //CustomerShoppingHandler 객체가 생성될 때 parameter의 null 여부를 검증하는 코드를 작성하세요
+        //- enteringQueue, productService, checkoutChannel
 
         Assertions.assertAll(
                 ()->{
@@ -97,8 +97,8 @@ class CustomerShoppingHandlerTest {
         methodOptional.get().setAccessible(true);
         methodOptional.get().invoke(customerShoppingHandler);
 
-        //Mokito.verify()를 이용해서 checkoutChannel.addRequest() 1회 호출되었는지 검증 합니다.
-        //checkoutChannel.addRequest() 호출해서 결제 대기열에 등록합니다.
+        //Mockito.verify()를 이용해서 checkoutChannel.addRequest()가 1회 호출되었는지 검증합니다.
+        //checkoutChannel.addRequest()를 호출해서 결제 대기열에 등록합니다.
 
         Mockito.verify(checkoutChannel,Mockito.times(1)).addRequest(any());
     }
@@ -121,7 +121,7 @@ class CustomerShoppingHandlerTest {
         int actual = (int)methodOptional.get().invoke(customerShoppingHandler);
         log.debug("{actual:{}}",actual);
 
-        //1<= actual <= 5 검증 합니다.
+        //1 <= actual <= 5 검증합니다.
         Assertions.assertTrue(actual>=1 && actual<=5);
     }
 
@@ -140,7 +140,7 @@ class CustomerShoppingHandlerTest {
         int actual = (int)methodOptional.get().invoke(customerShoppingHandler);
         log.debug("{actual:{}}",actual);
 
-        // 1<= actual <= 10 검증 합니다.
+        // 1 <= actual <= 10 검증합니다.
         Assertions.assertTrue(actual>=1 && actual<=10);
     }
 
@@ -163,7 +163,7 @@ class CustomerShoppingHandlerTest {
 
         log.debug("totalCount:{}, actual:{}",totalCount, actual);
 
-        //actual < = totalCount 인지 검증 합니다.
+        //actual <= totalCount인지 검증합니다.
         Assertions.assertTrue(actual<=totalCount);
     }
 
