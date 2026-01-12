@@ -23,7 +23,7 @@ public class PointTest {
     }
 
     @Test
-    @DisplayName("거리 게산 테스트")
+    @DisplayName("거리 계산 테스트")
     void testDistanceTo() {
         double distance = p1.distanceTo(p2);
         assertEquals(5, distance);

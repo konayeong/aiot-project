@@ -21,9 +21,11 @@ public class Point {
         if (other == null) {
             throw new IllegalArgumentException("포인트가 null일 수 없음");
         }
+
         double subX = other.getX() - x;
         double subY = other.getY() - y;
 
         return Math.sqrt(subX * subX + subY * subY);
+        // return Math.sqrt(Math.pow(subX, 2) + Math.pow(subY, 2));
     }
 }
