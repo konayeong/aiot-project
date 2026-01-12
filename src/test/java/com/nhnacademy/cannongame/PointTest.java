@@ -1,4 +1,4 @@
-package com.nhnacademy;
+package com.nhnacademy.cannongame;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;

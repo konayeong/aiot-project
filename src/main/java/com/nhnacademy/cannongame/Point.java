@@ -1,4 +1,4 @@
-package com.nhnacademy;
+package com.nhnacademy.cannongame;
 
 public class Point {
     private final double x;
