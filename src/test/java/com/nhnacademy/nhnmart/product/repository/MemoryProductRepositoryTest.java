@@ -37,8 +37,8 @@ class MemoryProductRepositoryTest {
         productRepository.save(actual);
 
         //2l 해당되는 product가 정상 등록되었는지 검증 합니다.
-        Optional<Product> exceptedOptional = productRepository.findById(2l);
-        Assertions.assertEquals(exceptedOptional.get(),actual);
+        Optional<Product> expectedOptional = productRepository.findById(2l);
+        Assertions.assertEquals(expectedOptional.get(),actual);
     }
 
     @Test

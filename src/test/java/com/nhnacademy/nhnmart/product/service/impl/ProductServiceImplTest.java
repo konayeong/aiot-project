@@ -20,7 +20,6 @@ import com.nhnacademy.nhnmart.product.parser.ProductParser;
 import com.nhnacademy.nhnmart.product.repository.ProductRepository;
 import com.nhnacademy.nhnmart.product.service.ProductService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Collections;
@@ -71,19 +70,19 @@ class ProductServiceImplTest {
     @DisplayName("product 조회")
     void getProduct() {
 
-        Product excepted = new Product(1l,"주방세제","LG","(750㎖) 자연퐁 스팀워시 레몬","개",9900,100);
-        // productRepository가 mock 객체 임으로  findById(1l) 호출시 excepted 반환됨을 가정 합니다.
-        Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.of(excepted));
+        Product expected = new Product(1l,"주방세제","LG","(750㎖) 자연퐁 스팀워시 레몬","개",9900,100);
+        // productRepository가 mock 객체 임으로  findById(1l) 호출시 expected 반환됨을 가정 합니다.
+        Mockito.when(productRepository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         Product actual = productService.getProduct(1l);
 
-        //excepted 와 actual 일치하는지 검증 합니다.
-        Assertions.assertEquals(excepted,actual);
+        //expected 와 actual 일치하는지 검증 합니다.
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
     @Order(4)
-    @DisplayName("product 조회 - 재품이 존재하지 않을 때")
+    @DisplayName("product 조회 - 제품이 존재하지 않을 때")
     void getProduct_notFound() {
 
         //productRepository.findById(1l) 호출하면 Optional.empty() 반환됨을 가정 합니다.

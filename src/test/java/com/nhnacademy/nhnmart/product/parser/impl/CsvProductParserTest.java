@@ -72,19 +72,19 @@ class CsvProductParserTest {
     @DisplayName("parsing from /test/resources/product_data.csv")
     void parse() {
 
-        List<Product> excepted = new ArrayList<>(5);
-        excepted.add(new Product(1l,"주방세제","LG","(750㎖) 자연퐁 스팀워시 레몬","개",9900,100));
-        excepted.add(new Product(2l,"주방세제","헨켈","(750㎖) 프릴 베이킹소다 퓨어레몬","개",8900,100));
-        excepted.add(new Product(3l,"주방세제","LG","(490㎖) 자연퐁POP 솔잎","개",5300,100));
-        excepted.add(new Product(4l,"키친타올","유한","크리넥스 150매×6","개",8600,100));
-        excepted.add(new Product(5l,"행주","유한","향균 블루 행주 타올 45매×4","개",10400,100));
+        List<Product> expected = new ArrayList<>(5);
+        expected.add(new Product(1l,"주방세제","LG","(750㎖) 자연퐁 스팀워시 레몬","개",9900,100));
+        expected.add(new Product(2l,"주방세제","헨켈","(750㎖) 프릴 베이킹소다 퓨어레몬","개",8900,100));
+        expected.add(new Product(3l,"주방세제","LG","(490㎖) 자연퐁POP 솔잎","개",5300,100));
+        expected.add(new Product(4l,"키친타올","유한","크리넥스 150매×6","개",8600,100));
+        expected.add(new Product(5l,"행주","유한","향균 블루 행주 타올 45매×4","개",10400,100));
 
         List<Product> actual = productParser.parse();
         for(Product product : actual){
             log.debug("product:{}",product);
         }
 
-        //actual 과 excepted 일치 하는지 검증 합니다.
-        Assertions.assertEquals(excepted, actual);
+        //actual 과 expected 일치 하는지 검증 합니다.
+        Assertions.assertEquals(expected, actual);
     }
 }

@@ -65,7 +65,7 @@ public class RequestChannel {
             }
         }
 
-        //requestQueue에서 Executable(작업)을 반환 하고 , 대기하고 있는 thread를 깨웁 니다.
+        //requestQueue에서 Executable(작업)을 반환 하고 , 대기하고 있는 thread를 깨웁니다.
         notifyAll();
         return requestQueue.poll();
     }

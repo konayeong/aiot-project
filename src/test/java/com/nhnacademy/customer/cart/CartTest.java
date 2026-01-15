@@ -73,11 +73,11 @@ class CartTest {
         //productId : 2 장바구니 추가
         cart.getCartItems().add(new CartItem(2l,1));
 
-        List<CartItem> excepted = new ArrayList<>();
-        excepted.add(new CartItem(1l,1));
-        excepted.add(new CartItem(2l,1));
+        List<CartItem> expected = new ArrayList<>();
+        expected.add(new CartItem(1l,1));
+        expected.add(new CartItem(2l,1));
 
-        Assertions.assertEquals(excepted,cart.getCartItems());
+        Assertions.assertEquals(expected,cart.getCartItems());
     }
 
 }

@@ -45,7 +45,7 @@ public class CsvProductParser implements ProductParser {
     }
 
     public CsvProductParser(InputStream inputStream){
-        //inputStream prameter로 전달 됩니다. 초기화 합니다.
+        //inputStream parameter로 전달 됩니다. 초기화 합니다.
         if(Objects.isNull(inputStream)){
             throw new IllegalArgumentException();
         }

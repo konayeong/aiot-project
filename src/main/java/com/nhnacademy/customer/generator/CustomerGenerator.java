@@ -15,7 +15,7 @@ package com.nhnacademy.customer.generator;
 import com.devskiller.jfairy.Fairy;
 import com.devskiller.jfairy.producer.person.Person;
 import com.nhnacademy.customer.domain.Customer;
-import com.nhnacademy.nhnmart.entring.EnteringQueue;
+import com.nhnacademy.nhnmart.entering.EnteringQueue;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;

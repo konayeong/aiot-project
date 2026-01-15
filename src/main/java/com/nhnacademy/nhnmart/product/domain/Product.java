@@ -94,7 +94,7 @@ public class Product {
     }
 
     public void setQuantity(int quantity) {
-        //qunatity 수정, quantity < 0 이면 IllegalArgumentException 발생
+        //quantity 수정, quantity < 0 이면 IllegalArgumentException 발생
         if(quantity < 0 ){
             throw new IllegalArgumentException("quantity >=0");
         }

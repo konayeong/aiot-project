@@ -13,7 +13,7 @@
 package com.nhnacademy;
 
 import com.nhnacademy.customer.generator.CustomerGenerator;
-import com.nhnacademy.nhnmart.entring.EnteringQueue;
+import com.nhnacademy.nhnmart.entering.EnteringQueue;
 import com.nhnacademy.nhnmart.product.parser.ProductParser;
 import com.nhnacademy.nhnmart.product.parser.impl.CsvProductParser;
 import com.nhnacademy.nhnmart.product.repository.ProductRepository;

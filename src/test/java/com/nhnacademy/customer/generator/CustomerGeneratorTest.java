@@ -12,7 +12,7 @@
 
 package com.nhnacademy.customer.generator;
 
-import com.nhnacademy.nhnmart.entring.EnteringQueue;
+import com.nhnacademy.nhnmart.entering.EnteringQueue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +31,7 @@ class CustomerGeneratorTest {
         //enteringQueue 대기열을 capacity = 5로 초기화 합니다.
         enteringQueue = new EnteringQueue(5);
 
-        //enteringQueue를 이용 해서 customerGeneratorr 객체를 생성 합니다.
+        //enteringQueue를 이용 해서 customerGenerator 객체를 생성 합니다.
         customerGenerator = new CustomerGenerator(enteringQueue);
     }
 

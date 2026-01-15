@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void saveProduct(Product product) {
         /*product를 저장 합니다.
-           - product-id에 해당되는 제품이 이미 존재 한다면  AreadyExistProductException이 발생 합니다.
+           - product-id에 해당되는 제품이 이미 존재 한다면  ProductAlreadyExistsException이 발생 합니다.
         */
 
         if(productRepository.existById(product.getId())){

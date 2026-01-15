@@ -14,7 +14,7 @@ package com.nhnacademy.thread.customer;
 
 import com.nhnacademy.customer.cart.CartItem;
 import com.nhnacademy.customer.domain.Customer;
-import com.nhnacademy.nhnmart.entring.EnteringQueue;
+import com.nhnacademy.nhnmart.entering.EnteringQueue;
 import com.nhnacademy.nhnmart.product.domain.Product;
 import com.nhnacademy.nhnmart.product.service.ProductService;
 import com.nhnacademy.nhnmart.product.service.impl.ProductServiceImpl;

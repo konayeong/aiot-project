@@ -13,10 +13,7 @@
 package com.nhnacademy.customer.domain;
 
 import com.nhnacademy.customer.exception.InsufficientFundsException;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 //CustomerTest를 통과 해야 합니다.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -115,16 +112,16 @@ class CustomerTest {
     @Test
     @DisplayName("id와 name, money가 일치하면 동일한 객체로 식별")
     void testEquals1() {
-        Customer excepted = new Customer(1l,"NHN아카데미",100_0000);
-        Assertions.assertEquals(excepted, customer);
+        Customer expected = new Customer(1l,"NHN아카데미",100_0000);
+        Assertions.assertEquals(expected, customer);
     }
 
     @Order(11)
     @Test
     @DisplayName("name, money 일치, 아이디는 불일치")
     void testEquals2() {
-        Customer excepted = new Customer(2l,"NHN아카데미",100_0000);
-        Assertions.assertNotEquals(excepted, customer);
+        Customer expected = new Customer(2l,"NHN아카데미",100_0000);
+        Assertions.assertNotEquals(expected, customer);
     }
 
 }

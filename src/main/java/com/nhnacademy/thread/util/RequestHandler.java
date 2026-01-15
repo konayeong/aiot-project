@@ -49,7 +49,7 @@ public class RequestHandler implements Runnable {
                     Thread.currentThread().interrupt();
                 }
 
-                // 종료될 떄 필요한 코드가 있다면 작성 합니다.
+                // 종료될 때 필요한 코드가 있다면 작성 합니다.
                 log.debug("RequestHandler error : {}",e.getMessage(),e);
             }
         }
