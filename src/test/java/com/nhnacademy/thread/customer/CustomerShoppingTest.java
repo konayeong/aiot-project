@@ -90,7 +90,7 @@ public class CustomerShoppingTest {
     void shopping() throws InvocationTargetException, IllegalAccessException {
 
         CartLocal.initialize(new Customer(1l,"NHN아카데미1",100_0000));
-        CartLocal.getCart().tryAddItem(new CartItem(1l,1));
+       // CartLocal.getCart().tryAddItem(new CartItem(1l,1));
 
         Optional<Method> methodOptional = ReflectionUtils.findMethod(CustomerShoppingHandler.class,"shopping");
 
