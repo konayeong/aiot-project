@@ -1,43 +1,43 @@
 package com.nhnacademy.common;
 
-import com.nhnacademy.common.interfaces.Movable;
-import com.nhnacademy.common.interfaces.Paintable;
+public class Ball {
+    private Point center;
+    private final double radius;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import lombok.Getter;
-import lombok.Setter;
+    public Ball(Point center, double radius) {
+        if (center == null) {
+            throw new IllegalArgumentException("Center point cannot be null");
+        }
 
-@Getter
-@Setter
-public class Ball implements Paintable, Movable{
-    private Point cetner;
-    private double radius;
-    private Vector2D velocity;
-    private Color color;
-    private CollisionAction collisionAction;
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Radius must be positive");
+        }
 
-    // TODO 생성자 추가
-
-    @Override
-    public void paint(GraphicsContext gc) {
-        // TODO 원 그리기
+        this.center = center;
+        this.radius = radius;
     }
 
-    @Override
-    public void move(double deltaTime) { // TODO 위치 업데이트 ( 위치 += 속도 * 시간)
-
+    public Ball(double x, double y, double radius) {
+        this(new Point(x, y), radius);
     }
 
-    @Override
-    public Vector2D getVelocity() {
-        return velocity;
+    public Point getCenter() {
+        return center;
     }
 
-    @Override
-    public void setVelocity(Vector2D velocity) {
-        this.velocity = velocity;
+    public double getRadius() {
+        return radius;
     }
 
-    
+    public void moveTo(Point newCenter) {
+        center = newCenter;
+    }
+
+    public boolean contains(Point point) {
+        return center.distanceTo(point) <= radius;
+    }
+
+    public boolean contains(double x, double y) {
+        return contains(new Point(x, y));
+    }
 }
