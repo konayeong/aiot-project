@@ -3,9 +3,9 @@ package com.nhnacademy.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nhnacademy.common.Ball;
-import com.nhnacademy.common.PaintableBall;
 import com.nhnacademy.common.Point;
+import com.nhnacademy.common.balls.Ball;
+import com.nhnacademy.common.balls.PaintableBall;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -16,7 +16,7 @@ public class World {
 
     public World(double width, double height) {
         if (width <= 0 || height <= 0) {
-            throw new IllegalArgumentException("Width and height must be positive");
+            throw new IllegalArgumentException("너비와 높이는 0보다 커야 합니다.");
         }
         this.width = width;
         this.height = height;
@@ -32,11 +32,11 @@ public class World {
 
     public void add(Ball ball) {
         if (ball == null) {
-            throw new IllegalArgumentException("Ball cannot be null");
+            throw new IllegalArgumentException("Ball은 null일 수 없습니다.");
         }
 
         if (isInBounds(ball) == false) {
-            throw new IllegalArgumentException("Ball is out of world bounds");
+            throw new IllegalArgumentException("Ball이 영역 밖에 존재합니다.");
         }
 
         balls.add(ball);

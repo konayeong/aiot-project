@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 import java.util.Random;
 
 import com.nhnacademy.common.GameLoop;
-import com.nhnacademy.common.MovableBall;
 import com.nhnacademy.common.Point;
 import com.nhnacademy.common.Vector2D;
+import com.nhnacademy.common.balls.MovableBall;
 import com.nhnacademy.world.BoundedWorld;
 
 public class BoundedWorldApp extends Application {

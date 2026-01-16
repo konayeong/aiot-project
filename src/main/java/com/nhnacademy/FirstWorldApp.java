@@ -1,6 +1,6 @@
 package com.nhnacademy;
 
-import com.nhnacademy.common.PaintableBall;
+import com.nhnacademy.common.balls.PaintableBall;
 import com.nhnacademy.world.World;
 
 import javafx.application.Application;

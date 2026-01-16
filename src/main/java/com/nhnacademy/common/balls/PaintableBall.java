@@ -1,4 +1,6 @@
-package com.nhnacademy.common;
+package com.nhnacademy.common.balls;
+
+import com.nhnacademy.common.Point;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
