@@ -2,10 +2,10 @@ package com.nhnacademy.world;
 
 import java.util.List;
 
-import com.nhnacademy.common.balls.Ball;
+import com.nhnacademy.breakout.common.Ball;
+import com.nhnacademy.breakout.common.Box;
 import com.nhnacademy.common.balls.MovableBall;
 import com.nhnacademy.common.balls.PaintableBall;
-import com.nhnacademy.common.boxs.Box;
 import com.nhnacademy.common.boxs.MovableBox;
 import com.nhnacademy.common.boxs.PaintableBox;
 

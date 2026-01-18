@@ -1,7 +1,7 @@
 package com.nhnacademy.world;
 
-import com.nhnacademy.common.Vector2D;
-import com.nhnacademy.common.balls.Ball;
+import com.nhnacademy.breakout.common.Ball;
+import com.nhnacademy.breakout.common.Vector2D;
 import com.nhnacademy.common.balls.MovableBall;
 
 public class BoundedWorld extends MovableWorld{

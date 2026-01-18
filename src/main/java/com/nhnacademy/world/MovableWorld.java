@@ -1,6 +1,6 @@
 package com.nhnacademy.world;
 
-import com.nhnacademy.common.balls.Ball;
+import com.nhnacademy.breakout.common.Ball;
 import com.nhnacademy.common.balls.MovableBall;
 
 import lombok.Getter;

@@ -1,5 +1,7 @@
 package com.nhnacademy.common;
 
+import com.nhnacademy.breakout.common.Vector2D;
+
 public class Point {
     private final double x;
     private final double y;

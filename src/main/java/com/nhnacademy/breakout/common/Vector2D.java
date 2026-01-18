@@ -1,4 +1,6 @@
-package com.nhnacademy.common;
+package com.nhnacademy.breakout.common;
+
+import com.nhnacademy.common.Vector;
 
 public class Vector2D extends Vector{
     private double x;
@@ -51,17 +53,17 @@ public class Vector2D extends Vector{
         return x * other.getY() - y * other.getX();
     }
 
-    // public static Vector2D fromPolar(double magnitude, double angle) {
-    //     double x = magnitude * Math.cos(angle);
-    //     double y = magnitude * Math.sin(angle);
-    //     return new Vector2D(x, y);
-    // }
+    public static Vector2D fromPolar(double magnitude, double angle) {
+        double x = magnitude * Math.cos(angle);
+        double y = magnitude * Math.sin(angle);
+        return new Vector2D(x, y);
+    }
 
-    // public static Vector2D zero(){ return new Vector2D(); }
+    public static Vector2D zero(){ return new Vector2D(); }
 
-    // public static Vector2D unitX() { return new Vector2D(1,0); }
+    public static Vector2D unitX() { return new Vector2D(1,0); }
 
-    // public static Vector2D unitY(){ return new Vector2D(0,1); }
+    public static Vector2D unitY(){ return new Vector2D(0,1); }
     
     @Override
     public double get(int index) {

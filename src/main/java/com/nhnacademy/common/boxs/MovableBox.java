@@ -1,9 +1,13 @@
 package com.nhnacademy.common.boxs;
 
+import com.nhnacademy.breakout.common.Box;
+import com.nhnacademy.breakout.common.Vector2D;
+import com.nhnacademy.breakout.interfaces.Movable;
 import com.nhnacademy.common.Point;
-import com.nhnacademy.common.Vector2D;
 
-public class MovableBox extends Box {
+import javafx.scene.paint.Color;
+
+public class MovableBox extends Box implements Movable{
 
     private Vector2D velocity;
     
@@ -12,22 +16,25 @@ public class MovableBox extends Box {
         this.velocity = velocity;
     }
 
-    public MovableBox(Point point, double width, double height) {
-        this(point, width, height, new Vector2D(0,0 ));
+    public MovableBox(Point point, double width, double height, Color color) {
+        super(point, width, height,color);
     }
 
+    @Override
     public Vector2D getVelocity() {
         return velocity;
     }
 
+    @Override
     public void setVelocity(Vector2D velocity) {
         this.velocity = velocity;
     }
 
+    @Override
     public void move(double deltaTime) {
-        Point currentPosition = getPosition();
-        Vector2D displacement = new Vector2D(velocity.getX() * deltaTime, velocity.getY() * deltaTime);
-        Point newPosition = currentPosition.add(displacement);
-        setPosition(newPosition);
+        Point pos = getPosition();
+        Point next = pos.add(velocity.multiply(deltaTime));
+        setPosition(next);
     }
+
 }

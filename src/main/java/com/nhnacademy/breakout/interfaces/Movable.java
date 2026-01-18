@@ -1,6 +1,6 @@
-package com.nhnacademy.interfaces;
+package com.nhnacademy.breakout.interfaces;
 
-import com.nhnacademy.common.Vector2D;
+import com.nhnacademy.breakout.common.Vector2D;
 
 public interface Movable {
     void move(double deltaTime);

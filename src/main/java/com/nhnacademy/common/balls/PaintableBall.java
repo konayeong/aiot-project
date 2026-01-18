@@ -1,5 +1,6 @@
 package com.nhnacademy.common.balls;
 
+import com.nhnacademy.breakout.common.Ball;
 import com.nhnacademy.common.Point;
 
 import javafx.scene.canvas.GraphicsContext;

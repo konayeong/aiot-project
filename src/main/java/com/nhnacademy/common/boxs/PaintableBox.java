@@ -1,5 +1,6 @@
 package com.nhnacademy.common.boxs;
 
+import com.nhnacademy.breakout.common.Box;
 import com.nhnacademy.common.Point;
 
 import javafx.scene.canvas.GraphicsContext;

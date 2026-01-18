@@ -1,7 +1,7 @@
 package com.nhnacademy.common.balls;
 
+import com.nhnacademy.breakout.common.Vector2D;
 import com.nhnacademy.common.Point;
-import com.nhnacademy.common.Vector2D;
 
 import javafx.scene.paint.Color;
 

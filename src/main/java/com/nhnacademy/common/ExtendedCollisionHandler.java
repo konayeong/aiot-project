@@ -2,8 +2,8 @@ package com.nhnacademy.common;
 
 import java.util.List;
 
-import com.nhnacademy.common.balls.Ball;
-import com.nhnacademy.common.boxs.Box;
+import com.nhnacademy.breakout.common.Ball;
+import com.nhnacademy.breakout.common.Box;
 import com.nhnacademy.common.enums.CollisionSide;
 
 //TODO 충돌 처리

@@ -3,8 +3,8 @@ package com.nhnacademy.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nhnacademy.breakout.common.Ball;
 import com.nhnacademy.common.Point;
-import com.nhnacademy.common.balls.Ball;
 import com.nhnacademy.common.balls.PaintableBall;
 
 import javafx.scene.canvas.GraphicsContext;

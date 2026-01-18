@@ -8,9 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.Random;
 
+import com.nhnacademy.breakout.common.Vector2D;
 import com.nhnacademy.common.GameLoop;
 import com.nhnacademy.common.Point;
-import com.nhnacademy.common.Vector2D;
 import com.nhnacademy.common.balls.MovableBall;
 import com.nhnacademy.world.BoundedWorld;
 

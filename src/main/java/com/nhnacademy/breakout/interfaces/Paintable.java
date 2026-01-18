@@ -1,4 +1,4 @@
-package com.nhnacademy.interfaces;
+package com.nhnacademy.breakout.interfaces;
 
 import javafx.scene.canvas.GraphicsContext;
 
