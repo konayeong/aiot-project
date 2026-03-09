@@ -45,7 +45,7 @@ class UserRepositoryImplTest {
     @Test
     @Order(2)
     @DisplayName("로그인 : sql injection 방어")
-    @Disabled
+//    @Disabled
     void findByUserIdAndUserPassword_sql_injection(){
         //테스트 코드가 통과할 수 있도록  userRepository.findByUserIdAndUserPassword를 수정하세요.
         String password="' or '1'='1";
