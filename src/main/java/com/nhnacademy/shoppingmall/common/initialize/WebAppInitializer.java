@@ -10,7 +10,7 @@ import jakarta.servlet.annotation.HandlesTypes;
 import java.util.Set;
 
 @Slf4j
-@HandlesTypes(
+@HandlesTypes( // 속성에 정의한 클래스를 구현한 클래스 메타 정보들을 onStartup() 실행 시 파라미터 Set<Class<?>> c에 담아온다.
         value = {
                 BaseController.class
         }

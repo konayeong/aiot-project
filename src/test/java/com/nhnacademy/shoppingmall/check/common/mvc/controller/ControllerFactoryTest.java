@@ -35,7 +35,6 @@ class ControllerFactoryTest {
     static final ServletContext ctx = Mockito.mock(ServletContext.class);
     static Set<Class<?>> classSet;
     static final HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-
     @BeforeAll
     static void setUp() {
         classSet = Set.of(
