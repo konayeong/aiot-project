@@ -31,18 +31,20 @@ CREATE TABLE products (
 
 -- product_categories
 CREATE TABLE product_categories (
-                                    product_id INT NOT NULL,
-                                    category_id INT NOT NULL,
+                            product_id INT NOT NULL,
+                            category_id INT NOT NULL,
 
-                                    PRIMARY KEY (product_id, category_id),
+                            PRIMARY KEY (product_id, category_id),
 
-                                    CONSTRAINT fk_pc_product
-                                        FOREIGN KEY (product_id)
-                                            REFERENCES products(product_id),
+                            CONSTRAINT fk_pc_product
+                                FOREIGN KEY (product_id)
+                                REFERENCES products(product_id)
+                                ON DELETE CASCADE,
 
-                                    CONSTRAINT fk_pc_category
-                                        FOREIGN KEY (category_id)
-                                            REFERENCES categories(category_id)
+                            CONSTRAINT fk_pc_category
+                                FOREIGN KEY (category_id)
+                                REFERENCES categories(category_id)
+                                ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='상품 카테고리';
 
@@ -56,38 +58,6 @@ CREATE TABLE addresses (
                                FOREIGN KEY (user_id)
                                    REFERENCES users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='회원주소';
-
--- cart
-CREATE TABLE cart (
-                      cart_id INT AUTO_INCREMENT PRIMARY KEY,
-                      user_id VARCHAR(50) NOT NULL UNIQUE,
-
-                      CONSTRAINT fk_cart_user
-                          FOREIGN KEY (user_id)
-                              REFERENCES users(user_id)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='장바구니';
-
-
--- cart_items
-CREATE TABLE cart_items (
-                            cart_item_id INT AUTO_INCREMENT PRIMARY KEY,
-                            cart_id INT NOT NULL,
-                            product_id INT NOT NULL,
-                            quantity INT NOT NULL,
-
-                            UNIQUE (cart_id, product_id),
-
-                            CONSTRAINT fk_cart_items_cart
-                                FOREIGN KEY (cart_id)
-                                    REFERENCES cart(cart_id),
-
-                            CONSTRAINT fk_cart_items_product
-                                FOREIGN KEY (product_id)
-                                    REFERENCES products(product_id)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='장바구니 아이템';
-
 
 -- orders
 CREATE TABLE orders (
@@ -117,11 +87,12 @@ CREATE TABLE order_items (
 
                              CONSTRAINT fk_order_items_order
                                  FOREIGN KEY (order_id)
-                                     REFERENCES orders(order_id),
+                                 REFERENCES orders(order_id),
 
                              CONSTRAINT fk_order_items_product
                                  FOREIGN KEY (product_id)
                                      REFERENCES products(product_id)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='주문 아이템';
 
 
