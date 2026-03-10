@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.Objects;
 
-@RequestMapping(method = RequestMapping.Method.POST, value = {"/logout.do"})
+@RequestMapping(method = RequestMapping.Method.GET, value = {"/logout.do"})
 public class LogoutController implements BaseController {
     //todo#13-3 로그아웃 구현
     @Override
@@ -18,6 +18,6 @@ public class LogoutController implements BaseController {
         if(Objects.nonNull(session)) {
             session.invalidate();
         }
-        return "redirect:/login.do";
+        return "redirect:/index.do";
     }
 }

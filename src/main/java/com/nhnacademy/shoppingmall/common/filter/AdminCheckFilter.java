@@ -22,9 +22,11 @@ public class AdminCheckFilter extends HttpFilter {
         //todo#11 /admin/ 하위 요청은 관리자 권한의 사용자만 접근할 수 있습니다. ROLE_USER가 접근하면 403 Forbidden 에러처리
         HttpSession session = req.getSession(false);
 
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("loginUser");
+        log.debug("user : {}", user.getUserAuth());
         if(user.getUserAuth().equals(User.Auth.ROLE_USER)) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
         }
 
         chain.doFilter(req, res);
