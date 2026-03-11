@@ -1,11 +1,14 @@
 package com.nhnacademy.shoppingmall.point.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class PointHistory {
     public enum PointType {
@@ -34,14 +37,15 @@ public class PointHistory {
         }
     }
 
+    @Setter
     private int pointHistoryId;
     private String userId;
-    private int orderId;
+    private Integer orderId;
     private PointType pointType;
     private int amount;
     private LocalDateTime createdAt;
 
-    public PointHistory(String userId, int orderId, PointType pointType, int amount, LocalDateTime createdAt) {
+    public PointHistory(String userId, Integer orderId, PointType pointType, int amount, LocalDateTime createdAt) {
         this.userId = userId;
         this.orderId = orderId;
         this.pointType = pointType;
