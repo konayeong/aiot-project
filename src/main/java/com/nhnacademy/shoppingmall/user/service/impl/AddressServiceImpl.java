@@ -25,6 +25,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public void updateAddress(Address address) {
+        int result = addressRepository.update(address);
+        if(result < 1) {
+            throw new RuntimeException("Address update fail");
+        }
+    }
+
+    @Override
     public void deleteAddress(int addressId, String userId) {
         if(userId == null || userId.isBlank()) {
             throw new UserNotFoundException(userId);

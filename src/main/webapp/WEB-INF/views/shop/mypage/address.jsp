@@ -13,8 +13,9 @@
     <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-around">
-          <a href="/mypage/index.do" class="btn btn-outline-secondary fw-bold px-4">포인트 내역</a>
-<%--          <a href="#" class="btn btn-outline-secondary px-4">회원 정보 수정</a>--%>
+          <a href="/mypage/index.do" class="btn btn-outline-secondary px-4">포인트 내역</a>
+          <a href="#" class="btn btn-outline-secondary px-4">주문 명세</a>
+          <a href="/mypage/info.do" class="btn btn-outline-secondary px-4">회원 정보 수정</a>
           <a href="/mypage/address.do" class="btn btn-primary px-4">주소 관리</a>
         </div>
       </div>
@@ -41,11 +42,41 @@
                         ${addr.address}
                     </div>
 
-                    <form action="/mypage/addressDeleteAction.do" method="post" class="m-0">
-                      <input type="hidden" name="address_id" value="${addr.addressId}">
-                      <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('이 주소를 삭제하시겠습니까?');">삭제</button>
-                    </form>
+                    <div class="d-flex gap-2">
+                      <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal${addr.addressId}">
+                        수정
+                      </button>
+
+                      <form action="/mypage/addressDeleteAction.do" method="post" class="m-0">
+                        <input type="hidden" name="address_id" value="${addr.addressId}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('이 주소를 삭제하시겠습니까?');">삭제</button>
+                      </form>
+                    </div>
                   </li>
+
+                  <div class="modal fade" id="editModal${addr.addressId}" tabindex="-1" aria-labelledby="editModalLabel${addr.addressId}" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <form action="/mypage/addressUpdateAction.do" method="post">
+                          <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="editModalLabel${addr.addressId}">배송지 수정</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <input type="hidden" name="address_id" value="${addr.addressId}">
+                            <div class="mb-3">
+                              <label for="edit_address_${addr.addressId}" class="form-label text-muted">주소 입력</label>
+                              <textarea class="form-control" id="edit_address_${addr.addressId}" name="address" rows="3" required>${addr.address}</textarea>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="submit" class="btn btn-primary">수정 완료</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </c:forEach>
               </c:otherwise>
             </c:choose>

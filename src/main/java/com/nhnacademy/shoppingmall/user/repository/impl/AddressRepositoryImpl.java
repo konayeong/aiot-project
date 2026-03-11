@@ -35,6 +35,23 @@ public class AddressRepositoryImpl implements AddressRepository {
     }
 
     @Override
+    public int update(Address address) {
+        String sql = "update addresses set address=? where address_id=? and user_id=?";
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, address.getAddress());
+            pstm.setInt(2, address.getAddressId());
+            pstm.setString(3, address.getUserId());
+
+            return pstm.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Address update error", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int deleteByAddressIdAndUserId(int addressId, String userId) {
         String sql = "delete from addresses where address_id = ? and user_id = ?";
         Connection conn = DbConnectionThreadLocal.getConnection();

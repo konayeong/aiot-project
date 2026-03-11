@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface AddressRepository {
     int save(Address address);
+    int update(Address address);
     int deleteByAddressIdAndUserId(int addressId, String userId);
     List<Address> findAllByUserId(String userId);
 }

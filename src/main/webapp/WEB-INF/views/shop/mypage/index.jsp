@@ -14,8 +14,9 @@
     <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-around">
-          <a href="/mypage/index.do" class="btn btn-primary fw-bold px-4">포인트 내역</a>
-<%--          <a href="#" class="btn btn-outline-secondary px-4">회원 정보 수정</a>--%>
+          <a href="/mypage/index.do" class="btn btn-primary px-4">포인트 내역</a>
+          <a href="#" class="btn btn-outline-secondary px-4">주문 명세</a>
+          <a href="/mypage/info.do" class="btn btn-outline-secondary px-4">회원 정보 수정</a>
           <a href="/mypage/address.do" class="btn btn-outline-secondary px-4">주소 관리</a>
         </div>
       </div>
