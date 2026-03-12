@@ -1,8 +1,7 @@
-package com.nhnacademy.shoppingmall.controller.index;
+package com.nhnacademy.shoppingmall.controller.admin.product.get;
 
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
-
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
@@ -14,31 +13,31 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
+
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do"})
-public class IndexController implements BaseController {
-    private final ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl(), new ProductCategoryRepositoryImpl(), new CategoryRepositoryImpl());
+@RequestMapping(method = RequestMapping.Method.GET, value = "/admin/products.do")
+public class ProductListController implements BaseController {
+    private final ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl(), new ProductCategoryRepositoryImpl(),  new CategoryRepositoryImpl());
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        int page = 1;
-        int size = 10;
-        String pageParam = req.getParameter("page");
-        if (pageParam != null && !pageParam.isEmpty()) {
-            page = Integer.parseInt(pageParam);
-        }
-        // TODO 파라미터 (category / productName)
-        String keyword = req.getParameter("searchKeyword");
-        log.debug("keyword : {}", keyword);
-        Page<Product> productPage = productService.getProducts(page, size, keyword);
-        req.setAttribute("products", productPage.getContent());
 
-        long totalCount = productPage.getTotalCount();
+        String keyword = req.getParameter("searchKeyword");
+        int page = 1;
+        int size = 9;
+        if(req.getParameter("page")!=null) {
+            page = Integer.parseInt(req.getParameter("page"));
+        }
+
+        Page<Product> products = productService.getProducts(page, size, keyword);
+
+        req.setAttribute("products", products.getContent());
+        long totalCount = products.getTotalCount();
         int totalPages = (int) Math.ceil((double) totalCount / size);
         req.setAttribute("currentPage", page);
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("searchKeyword", keyword);
 
-        return "shop/main/index";
+        return "shop/admin/product_list";
     }
 }
