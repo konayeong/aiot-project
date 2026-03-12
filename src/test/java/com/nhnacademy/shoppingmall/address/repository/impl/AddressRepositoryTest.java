@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 public class AddressRepositoryTest {
     AddressRepository addressRepository = new AddressRepositoryImpl();
     UserRepository userRepository = new UserRepositoryImpl();
@@ -48,6 +47,22 @@ public class AddressRepositoryTest {
 
     @Test
     @Order(2)
+    @DisplayName("주소 수정 테스트")
+    void testUpdateAddress() {
+        Address address = new Address(user.getUserId(), "testAddress");
+        int addressId = addressRepository.save(address);
+
+        Address updateAddress = new Address(addressId, user.getUserId(), "updateAddress");
+        int result = addressRepository.update(updateAddress);
+
+        assertEquals(1, result);
+
+        List<Address> list = addressRepository.findAllByUserId(user.getUserId());
+        assertEquals("updateAddress", list.getFirst().getAddress());
+    }
+
+    @Test
+    @Order(3)
     @DisplayName("주소 삭제 테스트")
     void testDeleteAddress() {
         Address address = new Address(user.getUserId(), "testAddress");
@@ -60,7 +75,7 @@ public class AddressRepositoryTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("특정 유저의 주소 목록 조회 테스트")
     void testFindAllByUserId() {
         addressRepository.save(new Address(user.getUserId(), "testAddress1"));

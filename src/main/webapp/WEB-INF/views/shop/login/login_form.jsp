@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" trimDirectiveWhitespaces="true" session="false" %>
 
 <div style="margin: auto; width: 400px;">
@@ -23,3 +24,9 @@
         </form>
     </div>
 </div>
+
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert("${errorMessage}")
+    </script>
+</c:if>

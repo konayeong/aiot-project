@@ -20,13 +20,18 @@ public class AddressUpdateController implements BaseController {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("loginUser");
 
-        String addressIdStr = req.getParameter("address_id");
-        String address = req.getParameter("address");
+        String addressIDStr = req.getParameter("address_id");
+        String zipcode = req.getParameter("zipcode");
+        String baseAddress = req.getParameter("base_address");
+        String detailAddress = req.getParameter("detail_address");
 
-        if (addressIdStr != null && address != null && !address.trim().isEmpty()) {
-            int addressId = Integer.parseInt(addressIdStr);
-            Address updateAddress = new Address(addressId, user.getUserId(), address);
-            addressService.updateAddress(updateAddress );
+        if(addressIDStr!=null && zipcode!=null && baseAddress!=null && detailAddress!=null) {
+            int addressId = Integer.parseInt(addressIDStr);
+
+            String fullAddress = String.format("[%s] %s %s", zipcode, baseAddress, detailAddress);
+
+            Address address = new Address(addressId, user.getUserId(), fullAddress);
+            addressService.updateAddress(address);
         }
 
         return "redirect:/mypage/address.do";

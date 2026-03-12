@@ -45,7 +45,7 @@ public class LoginPostController implements BaseController {
                 userService.updateUser(user);
 
                 pointService.savePointHistory(new PointHistory(
-                        user.getUserId(), null, PointHistory.PointType.LOGIN, 10000, LocalDateTime.now()
+                        user.getUserId(), null, PointHistory.PointType.LOGIN, 10000
                 ));
                 log.info("Daily first login point(10,000) rewarded to user: {}", userId);
             }
@@ -58,6 +58,7 @@ public class LoginPostController implements BaseController {
             return "redirect:/index.do";
 
         }catch (UserNotFoundException e) {
+            req.setAttribute("errorMessage", "아이디와 비밀번호가 일치하지 않습니다.");
             return "shop/login/login_form";
         }
 

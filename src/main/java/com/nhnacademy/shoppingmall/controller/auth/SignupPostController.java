@@ -38,7 +38,7 @@ public class SignupPostController implements BaseController {
             userService.saveUser(newUser);
 
             PointHistory history = new PointHistory(userId, null, PointHistory.PointType.REGISTER,
-                    1_000_000, now);
+                    1_000_000);
             pointService.savePointHistory(history);
 
             log.info("Signup Success: {}", userId);

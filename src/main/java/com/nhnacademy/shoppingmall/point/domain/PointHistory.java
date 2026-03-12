@@ -45,11 +45,11 @@ public class PointHistory {
     private int amount;
     private LocalDateTime createdAt;
 
-    public PointHistory(String userId, Integer orderId, PointType pointType, int amount, LocalDateTime createdAt) {
+    public PointHistory(String userId, Integer orderId, PointType pointType, int amount) {
         this.userId = userId;
         this.orderId = orderId;
         this.pointType = pointType;
         this.amount = amount;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
     }
 }

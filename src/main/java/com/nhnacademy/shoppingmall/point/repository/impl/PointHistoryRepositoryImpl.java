@@ -68,24 +68,23 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
 
         List<PointHistory> content = new ArrayList<>();
         int offset = (page - 1) * pageSize;
-        String sql = "select point_history_id, user_id, order_id, point_type, amount, created_at from point_history where user_id=? order by created_at desc limit ?, ?";
+        String sql = "select * from point_history where user_id=? order by created_at desc limit ?, ?";
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setString(1, userId);
             pstm.setInt(2, offset);
             pstm.setInt(3, pageSize);
 
-            try(ResultSet rs = pstm.executeQuery()) {
-                while(rs.next()) {
-                    content.add(new PointHistory(
-                            rs.getInt("point_history_id"),
-                            rs.getString("user_id"),
-                            rs.getInt("order_id"),
-                            PointHistory.PointType.valueOf(rs.getInt("point_type")),
-                            rs.getInt("amount"),
-                            rs.getTimestamp("created_at").toLocalDateTime()
-                    ));
-                }
+            ResultSet rs = pstm.executeQuery();
+            while(rs.next()) {
+                content.add(new PointHistory(
+                        rs.getInt("point_history_id"),
+                        rs.getString("user_id"),
+                        rs.getInt("order_id"),
+                        PointHistory.PointType.valueOf(rs.getInt("point_type")),
+                        rs.getInt("amount"),
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                ));
             }
         } catch (SQLException e) {
             log.error("PointHistory findAllByUserId error", e);
@@ -104,10 +103,9 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {
             pstm.setString(1, userId);
-            try(ResultSet rs = pstm.executeQuery()) {
-                if(rs.next()) {
-                    return rs.getLong(1);
-                }
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()) {
+                return rs.getLong(1);
             }
         } catch (SQLException e) {
             log.error("PointHistory totalCountByUserId error", e);

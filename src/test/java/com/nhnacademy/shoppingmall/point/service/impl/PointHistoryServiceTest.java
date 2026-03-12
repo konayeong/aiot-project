@@ -30,7 +30,7 @@ public class PointHistoryServiceTest {
     @Test
     @DisplayName("포인트 내역 저장 Service 테스트")
     void testSavePointHistoryService() {
-        PointHistory history = new PointHistory("test_user", null, PointHistory.PointType.LOGIN, 10000, LocalDateTime.now());
+        PointHistory history = new PointHistory("test_user", null, PointHistory.PointType.LOGIN, 10000);
 
         when(pointRepository.save(any(PointHistory.class))).thenReturn(1);
 
@@ -42,7 +42,7 @@ public class PointHistoryServiceTest {
     @Test
     @DisplayName("포인트 내역 저장 Service 테스트 - 실패")
     void testSavePointHistoryService_Fail() {
-        PointHistory history = new PointHistory("test_user", null, PointHistory.PointType.LOGIN, 1000, LocalDateTime.now());
+        PointHistory history = new PointHistory("test_user", null, PointHistory.PointType.LOGIN, 1000);
 
         when(pointRepository.save(any(PointHistory.class))).thenReturn(0);
 

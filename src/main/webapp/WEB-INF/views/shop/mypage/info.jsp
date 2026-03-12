@@ -6,7 +6,6 @@
     <div class="row mb-4">
         <div class="col">
             <h2 class="fw-bold">마이페이지</h2>
-            <p class="text-muted">내 정보와 포인트 사용 내역을 한눈에 확인하세요.</p>
         </div>
     </div>
 
@@ -15,7 +14,7 @@
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-around">
                     <a href="/mypage/index.do" class="btn btn-outline-secondary px-4">포인트 내역</a>
-                    <a href="#" class="btn btn-outline-secondary px-4">주문 명세</a>
+                    <a href="/mypage/order.do" class="btn btn-outline-secondary px-4">주문 내역</a>
                     <a href="/mypage/info.do" class="btn btn-primary px-4">회원 정보 수정</a>
                     <a href="/mypage/address.do" class="btn btn-outline-secondary px-4">주소 관리</a>
                 </div>

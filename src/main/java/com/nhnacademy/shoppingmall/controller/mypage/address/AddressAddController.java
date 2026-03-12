@@ -19,12 +19,18 @@ public class AddressAddController implements BaseController {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("loginUser");
-        String addressStr = req.getParameter("address");
 
-        if(addressStr != null && !addressStr.trim().isEmpty()) {
-            Address address = new Address(user.getUserId(), addressStr);
+        String zipcode = req.getParameter("zipcode");
+        String baseAddress = req.getParameter("base_address");
+        String detailAddress = req.getParameter("detail_address");
+
+        if(zipcode != null && baseAddress != null && detailAddress != null) {
+            String fullAddress = String.format("[%s] %s %s", zipcode, baseAddress, detailAddress);
+
+            Address address = new Address(user.getUserId(), fullAddress);
             addressService.saveAddress(address);
         }
+
         return "redirect:/mypage/address.do";
     }
 }

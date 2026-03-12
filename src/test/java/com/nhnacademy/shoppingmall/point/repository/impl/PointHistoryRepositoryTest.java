@@ -40,7 +40,7 @@ public class PointHistoryRepositoryTest {
     @Order(1)
     @DisplayName("포인트 내역 저장 테스트")
     void testSavePointHistory() {
-        PointHistory history = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.REGISTER, 1000000, LocalDateTime.now());
+        PointHistory history = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.REGISTER, 1000000);
 
         int result = pointRepository.save(history);
 
@@ -51,15 +51,14 @@ public class PointHistoryRepositoryTest {
     @Order(2)
     @DisplayName("포인트 내역 페이징 및 최근 내역 내림차순 정렬")
     void testFindAllByUserId() throws InterruptedException {
-        LocalDateTime now = LocalDateTime.now();
 
 
-        PointHistory history1 = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.LOGIN, 1000, now);
+        PointHistory history1 = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.LOGIN, 1000);
         pointRepository.save(history1);
 
-        Thread.sleep(100);
+        Thread.sleep(1500);
 
-        PointHistory history2 = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.ORDER_REWARD, 2000, now.plusDays(1));
+        PointHistory history2 = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.ORDER_REWARD, 2000);
         pointRepository.save(history2);
 
         Page<PointHistory> page = pointRepository.findAllByUserId(testUser.getUserId(), 1, 10);
@@ -73,7 +72,7 @@ public class PointHistoryRepositoryTest {
     @Order(3)
     @DisplayName("특정 유저의 모든 포인트 내역 삭제 테스트")
     void testDeleteByUserId() {
-        PointHistory history = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.LOGIN, 1000, LocalDateTime.now());
+        PointHistory history = new PointHistory(testUser.getUserId(), null, PointHistory.PointType.LOGIN, 1000);
         pointRepository.save(history);
 
         int deletedCount = pointRepository.deleteByUserId(testUser.getUserId());
