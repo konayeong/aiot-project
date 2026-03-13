@@ -25,8 +25,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(int page, int size, String productName) {
-        return productRepository.findAll(page, size, productName);
+    public Page<Product> getProducts(int page, int size, String keyword) {
+        return productRepository.findAll(page, size, keyword);
+    }
+
+    @Override
+    public Page<Product> getProductsByCategoryId(int page, int size, int categoryId) {
+        return productRepository.findAllByCategoryId(page, size, categoryId);
     }
 
     @Override
@@ -72,7 +77,6 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(product.getProductId());
         }
 
-        // TODO 카테고리 존재 확인 ?
         for(String categoryId : categoryIds) {
             int categoryCnt = categoryRepository.countByCategoryId(Integer.parseInt(categoryId));
 

@@ -24,11 +24,36 @@
 </style>
 
 <div class="container py-5">
-    <div>
-        <c:forEach var="cateogry" items="${categories}">
-            <butoon type="button" class="btn btn-"
-        </c:forEach>
-    </div>
+
+    <!-- 상품 검색 -->
+    <form method="get" action="/index.do" >
+        <div class="mb-4">
+            <div class="mb-4 text-center">
+                <h4>카테고리를 선택하세요.</h4>
+                <div class="border rounded p-3">
+                    <c:forEach var="category" items="${categories}">
+                        <a href="/index.do?category_id=${category.categoryId}"
+                           class="btn me-2 mb-2 ${category.categoryId == click ? 'btn-dark text-white' : 'btn-outline-dark'}">
+                                ${category.categoryName}
+                        </a>
+                    </c:forEach>
+                </div>
+            </div>
+            <div class="d-flex">
+                <input type="search"
+                       name="searchKeyword"
+                       value="${search_keyword}"
+                       class="form-control me-2"
+                       placeholder="상품명으로 검색하세요">
+
+                <button class="btn btn-outline-dark" style="width: 10%">
+                    검색
+                </button>
+            </div>
+
+        </div>
+    </form>
+
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 ">
         <c:forEach var="product" items="${products}">

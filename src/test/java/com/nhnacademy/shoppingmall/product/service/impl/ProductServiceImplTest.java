@@ -95,6 +95,7 @@ class ProductServiceImplTest {
         String[] categoryIds = {"1", "2", "3"};
 
         Mockito.when(productRepository.countByProductId(anyInt())).thenReturn(1);
+        Mockito.when(categoryRepository.countByCategoryId(anyInt())).thenReturn(1);
         Mockito.when(pcRepository.deleteByProductId(anyInt())).thenReturn(0); // 아직 아무것도 들어있지 않음
         Mockito.when(pcRepository.save(anyInt(), anyInt())).thenReturn(1);
         Mockito.when(productRepository.update(any())).thenReturn(1);
