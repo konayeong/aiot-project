@@ -42,8 +42,15 @@ class ProductRepositoryImplPaginationTest {
     @Test
     @DisplayName("전체 로우 수")
     void totalCount() {
-        long actual = productRepository.totalCount();
+        long actual = productRepository.totalCount(null);
         Assertions.assertEquals(101, actual);
+    }
+
+    @Test
+    @DisplayName("전체 로우 수 - 검색")
+    void totalCount_search() {
+        long actual = productRepository.totalCount("1");
+        Assertions.assertEquals(21, actual);
     }
 
     @ParameterizedTest(name = "{index} page:{0}, rows:{1}") // 여러 개의 테스트를 한 번에 작성하기 위한 어노테이션
@@ -59,17 +66,17 @@ class ProductRepositoryImplPaginationTest {
 
     private static Stream<? extends Arguments> paginationArguments(){
         return Stream.of(
-                Arguments.of(1,10),
-                Arguments.of(2,10),
-                Arguments.of(3,10),
-                Arguments.of(4,10),
-                Arguments.of(5,10),
-                Arguments.of(6,10),
-                Arguments.of(7,10),
-                Arguments.of(8,10),
-                Arguments.of(9,10),
-                Arguments.of(10,10),
-                Arguments.of(11,1)
+                Arguments.of(1,10,null),
+                Arguments.of(2,10,null),
+                Arguments.of(3,10,null),
+                Arguments.of(4,10,null),
+                Arguments.of(5,10,null),
+                Arguments.of(6,10,null),
+                Arguments.of(7,10,null),
+                Arguments.of(8,10,null),
+                Arguments.of(9,10,null),
+                Arguments.of(10,10,null),
+                Arguments.of(11,1,null)
         );
     }
 }

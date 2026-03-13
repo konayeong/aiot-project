@@ -3,6 +3,7 @@ package com.nhnacademy.shoppingmall.controller.admin.product;
 import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
 import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.product.domain.Product;
+import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
 import com.nhnacademy.shoppingmall.product.exception.ProductAlreadyExistsException;
 import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.repository.impl.ProductCategoryRepositoryImpl;
@@ -73,6 +74,9 @@ public class ProductCreateController implements BaseController {
             productService.saveProduct(product, categoryIds);
         }catch (ProductAlreadyExistsException e) {
             req.setAttribute("error", "이미 등록된 상품입니다.");
+            return "shop/admin/product_create";
+        }catch (CategoryNotFoundException e) {
+            req.setAttribute("error", "존재하지 않는 카테고리가 포함되어 있습니다.");
             return "shop/admin/product_create";
         }
         return "redirect:/admin/products.do";

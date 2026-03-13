@@ -4,7 +4,8 @@ import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 
 public interface ProductService {
-    Page<Product> getProducts(int page, int size, String productName);
+    Page<Product> getProducts(int page, int size, String keyword);
+    Page<Product> getProductsByCategoryId(int page, int size, int categoryId);
 
     Product getProduct(int productId);
 

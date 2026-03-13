@@ -27,7 +27,7 @@
         <label for="user_birth">회원 생년월일(YYYYmmdd)</label>
       </div>
 
-      <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign up</button>
+      <button class="w-100 btn btn-lg btn-warning mt-3" type="submit">Sign up</button>
 
       <p class="mt-5 mb-3 text-muted">© 2022-2024</p>
 

@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Category {
     private int categoryId;
     private String categoryName;
-    private int sortOrder; // TODO Unique 설정을 했어야 했나
+    private int sortOrder; // TODO Q Unique 설정을 했어야 했나
 
     public Category(String categoryName, int sortOrder) {
         this.categoryName = categoryName;

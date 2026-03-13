@@ -18,10 +18,9 @@
     <title>nhn아카데미 shopping mall</title>
 
 </head>
-<body>
-
+<body class="d-flex flex-column min-vh-100">
     <div class="mainContainer">
-        <header class="p-3 bg-dark text-white">
+        <nav class="p-3 bg-dark text-white">
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -43,17 +42,13 @@
                         </c:if>
                     </ul>
 
-                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="get" action="/index.do">
-                        <input type="search" name="searchKeyword" class="form-control form-control-dark" placeholder="상품명으로 검색하세요." aria-label="Search">
-                    </form>
-
                     <div class="text-end">
                         <c:choose>
                             <%-- 세션에 'loginUser' 객체가 존재할 경우 (로그인 성공 상태) --%>
                             <c:when test="${not empty sessionScope.loginUser}">
                                 <span class="text-white me-3 fw-bold">${sessionScope.loginUser.userName}님</span>
-                                <span class="text-warning me-3">Point: ${sessionScope.loginUser.userPoint}P</span>
-                                <a class="btn btn-outline-danger me-2" href="/logout.do">로그아웃</a>
+                                <span class="text-white me-3">Point: ${sessionScope.loginUser.userPoint}P</span>
+                                <a class="btn btn-outline-light me-2" href="/logout.do">로그아웃</a>
                                 <form action="/mypage/withdrawalAction.do" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-outline-danger me-2" onclick="return confirm('정말로 탈퇴하시겠습니까?');">회원탈퇴</button>
                                 </form>
@@ -68,7 +63,7 @@
                     </div>
                 </div>
             </div>
-        </header>
+        </nav>
 
         <main>
             <div class="album py-5 bg-light">
@@ -79,16 +74,14 @@
 
         </main>
 
-        <footer class="text-muted py-5">
-            <div class="container">
-                <p class="float-end mb-1">
-                    <a href="#">Back to top</a>
-                </p>
-                <p class="mb-1">shoppingmall example is © nhnacademy.com</p>
-            </div>
-        </footer>
-
     </div>
-
+    <footer class="text-muted py-5 mt-auto">
+        <div class="container">
+            <p class="float-end mb-1">
+                <a href="#">Back to top</a>
+            </p>
+            <p class="mb-1">shoppingmall example is © nhnacademy.com</p>
+        </div>
+    </footer>
 </body>
 </html>

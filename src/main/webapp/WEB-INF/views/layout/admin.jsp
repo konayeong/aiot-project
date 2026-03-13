@@ -18,38 +18,36 @@
     <title>nhn아카데미 shopping mall Admin</title>
 
 </head>
-<body>
-
-<div class="mainContainer">
-    <header class="p-3 bg-dark text-white">
-        <div class="container">
-            <div class="d-flex flex-wrap align-items-center">
-                <ul class="nav">
-                    <li><a href="/index.do" class="nav-link px-2 text-white">메인페이지로</a></li>
-                </ul>
-
-                <div class="mx-auto">
-                    <a class="btn btn-outline-light me-2" href="/admin/products.do">상품</a>
-                    <a class="btn btn-warning" href="/admin/categories.do">카테고리</a>
-                </div>
-
-                <div>
-                    <a class="btn btn-outline-danger" href="/logout.do">로그아웃</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main>
-        <div class="album py-5 bg-light">
+<body class="d-flex flex-column min-vh-100">
+        <header class="p-3 bg-dark text-white">
             <div class="container">
-                <jsp:include page="${layout_content_holder}" />
+                <div class="d-flex flex-wrap align-items-center">
+                    <ul class="nav">
+                        <li><a href="/index.do" class="nav-link px-2 text-white">메인페이지로</a></li>
+                    </ul>
+
+                    <div class="mx-auto">
+                        <a class="btn btn-outline-light me-2" href="/admin/products.do">상품</a>
+                        <a class="btn btn-warning" href="/admin/categories.do">카테고리</a>
+                    </div>
+
+                    <div>
+                        <a class="btn btn-outline-light" href="/logout.do">로그아웃</a>
+                    </div>
+                </div>
             </div>
-        </div>
+        </header>
 
-    </main>
+        <main>
+            <div class="album py-5 bg-light">
+                <div class="container">
+                    <jsp:include page="${layout_content_holder}" />
+                </div>
+            </div>
 
-    <footer class="text-muted py-5">
+        </main>
+
+    <footer class="text-muted py-5 mt-auto">
         <div class="container">
             <p class="float-end mb-1">
                 <a href="#">Back to top</a>
@@ -57,8 +55,5 @@
             <p class="mb-1">shoppingmall example is © nhnacademy.com</p>
         </div>
     </footer>
-
-</div>
-
 </body>
 </html>

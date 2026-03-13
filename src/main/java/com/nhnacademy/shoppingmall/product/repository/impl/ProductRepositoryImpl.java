@@ -1,6 +1,5 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
-import com.mysql.cj.protocol.Resultset;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
@@ -14,33 +13,24 @@ import java.util.Optional;
 
 @Slf4j
 public class ProductRepositoryImpl implements ProductRepository {
-    @Override
-    public long totalCount() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
-
-        String sql = "select count(*) as totalCount from products";
-
-        try(PreparedStatement psmt = connection.prepareStatement(sql);
-            ResultSet rs = psmt.executeQuery()) {
-
-            if(rs.next()) {
-                return rs.getInt("totalCount");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return 0L;
-    }
 
     @Override
     public long totalCount(String productName) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
-        String sql = "select count(*) as totalCount from products where product_name like ?";
+        boolean isSearch = productName != null && !productName.isEmpty();
+        String sql;
+
+        if(isSearch) {
+            sql = "select count(*) as totalCount from products where product_name like ?";
+        }else {
+            sql = "select count(*) as totalCount from products";
+        }
 
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
-            psmt.setString(1, '%' + productName + '%');
+            if(isSearch) {
+                psmt.setString(1, '%' + productName + '%');
+            }
 
             try(ResultSet rs = psmt.executeQuery()) {
                 if(rs.next()) {
@@ -55,10 +45,30 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Page<Product> findAll(int page, int pageSize, String productName) {
+    public long totalCount(int categoryId) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
-        int offset = (page-1) * pageSize;
+        String sql = "select count(*) as totalCount from products p join product_categories pc on p.product_id = pc.product_id where pc.category_id = ?";
+
+        try(PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setInt(1, categoryId);
+
+            try(ResultSet rs = psmt.executeQuery()) {
+                if(rs.next()) {
+                    return rs.getInt("totalCount");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0L;
+    }
+
+    @Override
+    public Page<Product> findAll(int page, int size, String productName) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        int offset = (page-1) * size;
         boolean isSearch = productName != null && !productName.isEmpty();
         String sql;
 
@@ -73,10 +83,10 @@ public class ProductRepositoryImpl implements ProductRepository {
             if(isSearch) {
                 psmt.setString(1, "%" + productName + "%");
                 psmt.setInt(2, offset);
-                psmt.setInt(3, pageSize);
+                psmt.setInt(3, size);
             } else {
                 psmt.setInt(1, offset);
-                psmt.setInt(2, pageSize);
+                psmt.setInt(2, size);
             }
 
             try(ResultSet rs = psmt.executeQuery()) {
@@ -92,8 +102,42 @@ public class ProductRepositoryImpl implements ProductRepository {
                             rs.getString("image")
                     ));
                 }
-                // TODO 기존에는 데이터가 있을 때만 totalCount를 가져옴. 근데 gpt가 그러면 안된다는데 이유 알아내기
-                long totalCount = isSearch ? totalCount(productName) : totalCount();
+                // TODO Q 기존에는 데이터가 있을 때만 totalCount를 가져옴. 근데 gpt가 그러면 안된다는데 이유 알아내기
+                long totalCount = totalCount(productName);
+
+                return new Page<>(products, totalCount);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Page<Product> findAllByCategoryId(int page, int size, int categoryId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        int offset = (page-1) * size;
+        String sql = "select * from products p join product_categories pc on p.product_id = pc.product_id where pc.category_id = ? order by p.product_id limit ?, ?";
+
+        try(PreparedStatement psmt = connection.prepareStatement(sql)) {
+            psmt.setInt(1, categoryId);
+            psmt.setInt(2, offset);
+            psmt.setInt(3, size);
+
+            List<Product> products = new ArrayList<>();
+
+            try(ResultSet rs = psmt.executeQuery()) {
+                while(rs.next()) {
+                    products.add(new Product(
+                            rs.getInt("p.product_id"),
+                            rs.getString("p.product_name"),
+                            rs.getString("p.description"),
+                            rs.getInt("p.price"),
+                            rs.getInt("p.stock"),
+                            rs.getString("p.image")
+                    ));
+                }
+                long totalCount = totalCount(categoryId);
 
                 return new Page<>(products, totalCount);
             }

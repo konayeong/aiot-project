@@ -14,14 +14,14 @@ import java.util.List;
 
 @Slf4j
 public class ProductCategoryRepositoryImpl implements ProductCategoryRepository {
-    // TODO 단건 조회 시 표시를 위해서 ?
     @Override
     public List<Category> getByProductId(int productId) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         String sql = "select c.category_id as categoryId, c.category_name as categoryName, c.sort_order as sortOrder" +
                 " from product_categories pc join categories c on pc.category_id = c.category_id" +
-                " where pc.product_id = ?";
+                " where pc.product_id = ?" +
+                " order by categoryId";
 
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setInt(1, productId);
@@ -46,7 +46,7 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
     public List<Integer> getCategoryIdsByProductId(int productId) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
-        String sql = "select category_id from product_categories where product_id = ?";
+        String sql = "select category_id from product_categories where product_id = ? order by category_id";
 
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setInt(1, productId);

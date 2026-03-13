@@ -25,8 +25,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getProducts(int page, int size, String productName) {
-        return productRepository.findAll(page, size, productName);
+    public Page<Product> getProducts(int page, int size, String keyword) {
+        return productRepository.findAll(page, size, keyword);
+    }
+
+    @Override
+    public Page<Product> getProductsByCategoryId(int page, int size, int categoryId) {
+        return productRepository.findAllByCategoryId(page, size, categoryId);
     }
 
     @Override
@@ -43,18 +48,23 @@ public class ProductServiceImpl implements ProductService {
         if(productRepository.countByProductName(product.getProductName()) > 0) {
             throw new ProductAlreadyExistsException(product.getProductName());
         }
-        // 상품 저장
-        productRepository.save(product);
-
-        int productId = product.getProductId();
-        // 카테고리 등록
+        // 카테고리 존재 확인
+        // TODO Q 존재하지 않는 카테고리 -> 에러 or continue
         for(String categoryId : categoryIds) {
             int categoryCnt = categoryRepository.countByCategoryId(Integer.parseInt(categoryId));
 
             if(categoryCnt == 0) {
                 throw new CategoryNotFoundException(Integer.parseInt(categoryId));
             }
+        }
 
+        // 상품 저장
+        productRepository.save(product);
+
+        int productId = product.getProductId();
+
+        // product_category 저장
+        for(String categoryId : categoryIds) {
             pcRepository.save(productId, Integer.parseInt(categoryId));
         }
     }
@@ -67,6 +77,15 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(product.getProductId());
         }
 
+        for(String categoryId : categoryIds) {
+            int categoryCnt = categoryRepository.countByCategoryId(Integer.parseInt(categoryId));
+
+            if(categoryCnt == 0) {
+                throw new CategoryNotFoundException(Integer.parseInt(categoryId));
+            }
+        }
+
+        //product_categories 비웠다가 저장하기
         pcRepository.deleteByProductId(product.getProductId());
 
         for(String categoryId : categoryIds) {
