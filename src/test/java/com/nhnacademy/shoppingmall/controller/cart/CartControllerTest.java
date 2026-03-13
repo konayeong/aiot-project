@@ -1,6 +1,7 @@
 package com.nhnacademy.shoppingmall.controller.cart;
 
 import com.nhnacademy.shoppingmall.cart.domain.CartItem;
+import com.nhnacademy.shoppingmall.product.domain.Product;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -60,7 +61,9 @@ public class CartControllerTest {
         CartAddController addController = new CartAddController();
         int productId = 200;
 
-        cart.put(productId, new CartItem(productId, 3));
+        // 💡 수정됨: 가짜 Product 객체를 만들어서 CartItem 생성자에 전달합니다.
+        Product mockProduct = mock(Product.class);
+        cart.put(productId, new CartItem(mockProduct, 3));
 
         when(req.getParameter("product_id")).thenReturn(String.valueOf(productId));
         when(req.getParameter("quantity")).thenReturn("2"); // 2개 추가로 담기
@@ -77,7 +80,9 @@ public class CartControllerTest {
         CartUpdateController updateController = new CartUpdateController();
         int productId = 300;
 
-        cart.put(productId, new CartItem(productId, 1));
+        // 💡 수정됨: 가짜 Product 객체를 만들어서 CartItem 생성자에 전달합니다.
+        Product mockProduct = mock(Product.class);
+        cart.put(productId, new CartItem(mockProduct, 1));
 
         when(req.getParameter("product_id")).thenReturn(String.valueOf(productId));
         when(req.getParameter("quantity")).thenReturn("10");
@@ -93,7 +98,9 @@ public class CartControllerTest {
         CartDeleteController deleteController = new CartDeleteController();
         int productId = 400;
 
-        cart.put(productId, new CartItem(productId, 5));
+        // 💡 수정됨: 가짜 Product 객체를 만들어서 CartItem 생성자에 전달합니다.
+        Product mockProduct = mock(Product.class);
+        cart.put(productId, new CartItem(mockProduct, 5));
 
         when(req.getParameter("product_id")).thenReturn(String.valueOf(productId));
 

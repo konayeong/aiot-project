@@ -25,24 +25,22 @@
             <div class="container">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <c:choose>
-                            <c:when test="${sessionScope.loginUser.userAuth == 'ROLE_ADMIN'}">
-                                <li><a href="/admin/products.do" class="nav-link px-2 text-white">관리자페이지로</a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li><a href="/index.do" class="nav-link px-2 text-secondary">Home</a></li>
-                                <li><a href="/mypage/index.do" class="nav-link px-2 text-white">마이페이지</a></li>
-                            </c:otherwise>
-                        </c:choose>
-
                         <li><a href="/index.do" class="nav-link px-2 text-secondary">Home</a></li>
-                        <li><a href="/mypage/index.do" class="nav-link px-2 text-white">마이페이지</a></li>
-                        <c:choose>
-                            <%-- 세션에 'loginUser' 객체가 존재할 경우 (로그인 성공 상태) --%>
-                            <c:when test="${not empty sessionScope.loginUser}">
-                                <li><a href="/cart.do" class="nav-link px-2 text-white">장바구니</a></li>
-                            </c:when>
-                        </c:choose>
+
+                        <c:if test="${not empty sessionScope.loginUser}">
+                            <c:choose>
+                                <%-- 관리자인 경우 --%>
+                                <c:when test="${sessionScope.loginUser.userAuth == 'ROLE_ADMIN'}">
+                                    <li><a href="/admin/products.do" class="nav-link px-2 text-white">관리자페이지로</a></li>
+                                </c:when>
+
+                                <%-- 일반 유저인 경우 (마이페이지와 장바구니 묶음) --%>
+                                <c:otherwise>
+                                    <li><a href="/mypage/index.do" class="nav-link px-2 text-white">마이페이지</a></li>
+                                    <li><a href="/cart.do" class="nav-link px-2 text-white">장바구니</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
                     </ul>
 
                     <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" method="get" action="/index.do">

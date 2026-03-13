@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.cart.domain;
 
+import com.nhnacademy.shoppingmall.product.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,6 +9,6 @@ import lombok.Getter;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class CartItem {
-    private int productId;  // Product product로 변경 예정
+    private Product product;
     private int quantity;
 }

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 // 관리자 - 상품 등록
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/admin/products/create.do")
+@RequestMapping(method = RequestMapping.Method.POST, value = "/admin/product/create.do")
 public class ProductCreateController implements BaseController {
     private static final String UPLOAD_DIR = "/resources/upload";
 

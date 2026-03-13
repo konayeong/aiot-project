@@ -70,6 +70,33 @@
 
                     </ul>
                     <!-- 버튼 -->
+                    <form action="/cart/addAction.do" method="post">
+                        <input type="hidden" name="product_id" value="${product.productId}">
+
+                        <div class="mb-4">
+                            <label for="quantity" class="me-3 text-muted">구매 수량</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control text-center"
+                                   value="1" min="1" max="${product.stock}" style="width: 100px;"
+                            ${product.stock == 0 ? 'disabled' : ''}>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <c:choose>
+                                <%-- 재고가 1개 이상일 때만 장바구니 버튼 활성화 --%>
+                                <c:when test="${product.stock > 0}">
+                                    <button type="submit" class="btn btn-primary">
+                                        장바구니 담기
+                                    </button>
+                                </c:when>
+                                <%-- 품절일 경우 클릭 못 하게 막음 --%>
+                                <c:otherwise>
+                                    <button type="button" class="btn btn-secondary" disabled>
+                                        품절
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </form>
                 </div>
             </div>
 
