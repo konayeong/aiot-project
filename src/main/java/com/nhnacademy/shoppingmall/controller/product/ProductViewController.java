@@ -60,7 +60,7 @@ public class ProductViewController implements BaseController {
         recentList.remove(String.valueOf(product.getProductId())); // 존재하면 제거
         recentList.add(0, String.valueOf(product.getProductId())); // 제일 앞에 추가
         if(recentList.size() > 5){
-            recentList = recentList.subList(0, 5);
+            recentList = new ArrayList<>(recentList.subList(0, 5));
         }
 
         // 쿠키에 저장
