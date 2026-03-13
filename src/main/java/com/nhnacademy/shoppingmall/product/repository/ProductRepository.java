@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface ProductRepository {
     // pagination
-    long totalCount();
     long totalCount(String productName);
     Page<Product> findAll(int page, int pageSize, String productName);
 

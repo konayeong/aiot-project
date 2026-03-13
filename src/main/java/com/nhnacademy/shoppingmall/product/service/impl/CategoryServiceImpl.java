@@ -43,9 +43,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void saveCategory(Category category) {
-        // categoryName 중복 확인
-        // TODO sortOrder도 확인 필요 ?
-        if(categoryRepository.countByCategoryName(category.getCategoryName()) > 0) {
+        // categoryName, sortOrder 중복 확인
+        if(categoryRepository.countByCategoryNameOrSortOrder(category.getCategoryName(), category.getSortOrder()) > 0) {
             throw new CategoryAlreadyExistsException(category.getCategoryName());
         }
 
@@ -56,8 +55,13 @@ public class CategoryServiceImpl implements CategoryService {
     public void updateCategory(Category category) {
         int categoryCnt = categoryRepository.countByCategoryId(category.getCategoryId());
 
-        if(categoryCnt == 0) {
+        if(categoryCnt == 0) { // 카테고리 존재 여부
             throw new CategoryNotFoundException(category.getCategoryId());
+        }
+
+        // 카테고리 중복 확인 (이름, 정렬순서) TODO repository 값 확인해보기
+        if(categoryRepository.countByCategoryNameOrSortOrder(category.getCategoryName(), category.getSortOrder()) > 1) {
+            throw new CategoryAlreadyExistsException(category.getCategoryName());
         }
 
         categoryRepository.update(category);

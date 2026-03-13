@@ -43,18 +43,23 @@ public class ProductServiceImpl implements ProductService {
         if(productRepository.countByProductName(product.getProductName()) > 0) {
             throw new ProductAlreadyExistsException(product.getProductName());
         }
-        // 상품 저장
-        productRepository.save(product);
-
-        int productId = product.getProductId();
-        // 카테고리 등록
+        // 카테고리 존재 확인
+        // TODO Q 존재하지 않는 카테고리 -> 에러 or continue
         for(String categoryId : categoryIds) {
             int categoryCnt = categoryRepository.countByCategoryId(Integer.parseInt(categoryId));
 
             if(categoryCnt == 0) {
                 throw new CategoryNotFoundException(Integer.parseInt(categoryId));
             }
+        }
 
+        // 상품 저장
+        productRepository.save(product);
+
+        int productId = product.getProductId();
+
+        // product_category 저장
+        for(String categoryId : categoryIds) {
             pcRepository.save(productId, Integer.parseInt(categoryId));
         }
     }
@@ -67,6 +72,16 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException(product.getProductId());
         }
 
+        // TODO 카테고리 존재 확인 ?
+        for(String categoryId : categoryIds) {
+            int categoryCnt = categoryRepository.countByCategoryId(Integer.parseInt(categoryId));
+
+            if(categoryCnt == 0) {
+                throw new CategoryNotFoundException(Integer.parseInt(categoryId));
+            }
+        }
+
+        //product_categories 비웠다가 저장하기
         pcRepository.deleteByProductId(product.getProductId());
 
         for(String categoryId : categoryIds) {

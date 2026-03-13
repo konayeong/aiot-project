@@ -52,18 +52,6 @@ class ProductRepositoryImplTest {
 
     @Test
     @Order(3)
-    @DisplayName("product 삭제")
-    void deleteByProductId() {
-        int result = productRepository.deleteByProductId(testProduct.getProductId());
-
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(1, result),
-                () -> Assertions.assertFalse(productRepository.findById(testProduct.getProductId()).isPresent())
-        );
-    }
-
-    @Test
-    @Order(4)
     @DisplayName("product 수정")
     void update() {
         testProduct.setProductName("테스트 제품 수정");
@@ -74,6 +62,18 @@ class ProductRepositoryImplTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(1, result),
                 () -> Assertions.assertEquals(testProduct, productRepository.findById(testProduct.getProductId()).get())
+        );
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("product 삭제")
+    void deleteByProductId() {
+        int result = productRepository.deleteByProductId(testProduct.getProductId());
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, result),
+                () -> Assertions.assertFalse(productRepository.findById(testProduct.getProductId()).isPresent())
         );
     }
 

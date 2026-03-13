@@ -1,6 +1,5 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
-import com.mysql.cj.protocol.Resultset;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
@@ -14,33 +13,24 @@ import java.util.Optional;
 
 @Slf4j
 public class ProductRepositoryImpl implements ProductRepository {
-    @Override
-    public long totalCount() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
-
-        String sql = "select count(*) as totalCount from products";
-
-        try(PreparedStatement psmt = connection.prepareStatement(sql);
-            ResultSet rs = psmt.executeQuery()) {
-
-            if(rs.next()) {
-                return rs.getInt("totalCount");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return 0L;
-    }
 
     @Override
     public long totalCount(String productName) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
-        String sql = "select count(*) as totalCount from products where product_name like ?";
+        boolean isSearch = productName != null && !productName.isEmpty();
+        String sql;
+
+        if(isSearch) {
+            sql = "select count(*) as totalCount from products where product_name like ?";
+        }else {
+            sql = "select count(*) as totalCount from products";
+        }
 
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
-            psmt.setString(1, '%' + productName + '%');
+            if(isSearch) {
+                psmt.setString(1, '%' + productName + '%');
+            }
 
             try(ResultSet rs = psmt.executeQuery()) {
                 if(rs.next()) {
@@ -92,8 +82,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                             rs.getString("image")
                     ));
                 }
-                // TODO 기존에는 데이터가 있을 때만 totalCount를 가져옴. 근데 gpt가 그러면 안된다는데 이유 알아내기
-                long totalCount = isSearch ? totalCount(productName) : totalCount();
+                // TODO Q 기존에는 데이터가 있을 때만 totalCount를 가져옴. 근데 gpt가 그러면 안된다는데 이유 알아내기
+                long totalCount = totalCount(productName);
 
                 return new Page<>(products, totalCount);
             }

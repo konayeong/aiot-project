@@ -166,13 +166,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public int countByCategoryName(String categoryName) {
+    public int countByCategoryNameOrSortOrder(String categoryName, int sortOrder) {
         Connection connection = DbConnectionThreadLocal.getConnection();
 
-        String sql = "select count(*) as cnt from categories where category_name = ?";
+        String sql = "select count(*) as cnt from categories where category_name = ? or sort_order = ?";
 
         try(PreparedStatement psmt = connection.prepareStatement(sql)) {
             psmt.setString(1, categoryName);
+            psmt.setInt(2, sortOrder);
 
             try(ResultSet rs = psmt.executeQuery()) {
                 if(rs.next()) {

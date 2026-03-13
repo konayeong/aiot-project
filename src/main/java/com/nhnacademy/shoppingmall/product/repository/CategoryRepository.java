@@ -15,5 +15,5 @@ public interface CategoryRepository {
     int deleteAll(); // TEST
 
     int countByCategoryId(int productId);
-    int countByCategoryName(String categoryName);
+    int countByCategoryNameOrSortOrder(String categoryName, int sortOrder);
 }
