@@ -22,7 +22,7 @@ public class IndexController implements BaseController {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         int page = 1;
-        int size = 10;
+        int size = 12;
         String pageParam = req.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
             page = Integer.parseInt(pageParam);

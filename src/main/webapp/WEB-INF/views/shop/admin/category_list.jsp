@@ -8,7 +8,7 @@
 
         <h3 class="mb-3">카테고리 목록</h3>
 
-        <a href="/admin/categories/create.do" class="btn btn-primary">
+        <a href="/admin/categories/create.do" class="btn btn-warning">
             카테고리 등록
         </a>
 
@@ -39,7 +39,7 @@
 
                     <!-- 수정 -->
                     <a href="/admin/categories/edit.do?category_id=${category.categoryId}"
-                       class="btn btn-sm btn-warning">
+                       class="btn btn-sm btn-secondary">
                         수정
                     </a>
 

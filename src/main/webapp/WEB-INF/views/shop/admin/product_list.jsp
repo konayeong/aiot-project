@@ -2,6 +2,28 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          trimDirectiveWhitespaces="true" session="false" %>
 
+<style>
+    .custom-pagination .page-link {
+        border: none;
+        color: #2c3e50;
+        font-weight: 700;
+        border-radius: 20px;
+        margin-top: 40px;
+        margin-left : 10px;
+        margin-right : 10px;
+    }
+
+    .custom-pagination .page-link:hover {
+        background-color: #2c3e50;
+        color: white;
+    }
+
+    .custom-pagination .page-item.active .page-link {
+        background-color: #2c3e50;
+        color: white;
+    }
+</style>
+
 <div style="margin:auto; max-width:800px;">
     <!-- 상품 검색 -->
     <div class="mb-4">
@@ -14,7 +36,7 @@
                    class="form-control me-2"
                    placeholder="상품명으로 검색하세요">
 
-            <button class="btn btn-outline-primary" style="width: 10%">
+            <button class="btn btn-outline-dark" style="width: 10%">
                 검색
             </button>
 
@@ -27,13 +49,13 @@
 
         <h3 class="mb-0">상품 목록</h3>
 
-        <a href="/admin/products/create.do" class="btn btn-primary">
+        <a href="/admin/products/create.do" class="btn btn-warning">
             상품등록
         </a>
 
     </div>
 
-    <table class="table table-striped table-hover">
+    <table class="table table-borderless table-hover">
 
         <thead class="table-dark">
         <tr>
@@ -71,7 +93,7 @@
 
                 <td>
                     <a href="/admin/products/edit.do?product_id=${product.productId}"
-                       class="btn btn-sm btn-warning">
+                       class="btn btn-sm btn-secondary">
                         수정
                     </a>
                     <form method="post" action="/admin/products/delete.do" style="display:inline;">
@@ -86,16 +108,13 @@
         </tbody>
     </table>
 
-    <!-- 페이지네이션 -->
     <nav>
-        <ul class="pagination justify-content-center">
-
+        <ul class="pagination justify-content-center custom-pagination">
             <c:if test="${currentPage > 1}">
                 <li class="page-item">
                     <a class="page-link" href="/admin/products.do?page=${currentPage - 1}&searchKeyword=${search_keyword}">
-                        Previous
+                        <span aria-hidden="true">&laquo;</span>
                     </a>
-                </li>
             </c:if>
 
             <c:forEach var="i" begin="1" end="${totalPages}">
@@ -109,13 +128,11 @@
             <c:if test="${currentPage < totalPages}">
                 <li class="page-item">
                     <a class="page-link" href="/admin/products.do?page=${currentPage + 1}&searchKeyword=${search_keyword}">
-                        Next
+                        <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             </c:if>
-
         </ul>
-
     </nav>
 
 </div>
