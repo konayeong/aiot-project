@@ -14,11 +14,15 @@ import com.nhnacademy.shoppingmall.product.service.CategoryService;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
 import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
 import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do"})
@@ -28,6 +32,30 @@ public class IndexController implements BaseController {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
+        // == 최근 본 상품 == //
+        List<Product> recentProducts = new ArrayList<>();
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("recentProducts".equals(cookie.getName())) {
+                    try {
+                        String decoded = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                        String[] ids = decoded.split("\\|");
+                        for(String id : ids){
+                            Product p = productService.getProduct(Integer.parseInt(id));
+                            if(p != null) recentProducts.add(p);
+                        }
+                    } catch(Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+            }
+        }
+
+        req.setAttribute("recentProducts", recentProducts);
+
+        // == 페이지네이션 == //
         int page = 1;
         int size = 12;
         String pageParam = req.getParameter("page");

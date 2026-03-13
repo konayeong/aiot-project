@@ -25,6 +25,33 @@
 
 <div class="container py-5">
 
+    <h3 class="mt-5">최근 본 상품</h3>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3 mb-5">
+        <c:choose>
+            <c:when test="${not empty recentProducts}">
+                <c:forEach var="recentProduct" items="${recentProducts}">
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <a href="/products/detail.do?product_id=${recentProduct.productId}">
+                                <img src="${recentProduct.image}"
+                                     class="card-img-top"
+                                     style="height:150px; object-fit:cover;"
+                                     alt="${recentProduct.productName}"
+                                     onerror="this.src='/resources/no-image.png'">
+                            </a>
+                            <div class="card-body text-center">
+                                <p class="card-text fw-bold">${recentProduct.productName}</p>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <p class="text-muted">최근 본 상품이 없습니다.</p>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
     <!-- 상품 검색 -->
     <form method="get" action="/index.do" >
         <div class="mb-4">
