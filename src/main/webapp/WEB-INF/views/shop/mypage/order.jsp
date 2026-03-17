@@ -36,6 +36,7 @@
                 <th>날짜</th>
                 <th>주문 번호</th>
                 <th>결제 금액</th>
+                <th>상세내역</th>
               </tr>
               </thead>
               <tbody>
@@ -49,10 +50,13 @@
                   <c:forEach var="order" items="${orderHistoryPage.content}">
                     <tr>
                       <td>${order.createdAt}</td>
-
                       <td>${order.orderId}</td>
-
-                      <td>${order.usedPoint}</td>
+                      <td>
+                        <fmt:formatNumber value="${order.usedPoint}" pattern="#,###"/> P
+                      </td>
+                      <td>
+                        <a href="/mypage/order_detail.do?order_id=${order.orderId}" class="btn btn-outline-secondary">확인</a>
+                      </td>
                     </tr>
                   </c:forEach>
                 </c:otherwise>

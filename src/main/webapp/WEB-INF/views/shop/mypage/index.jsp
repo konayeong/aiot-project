@@ -61,15 +61,14 @@
                         </c:choose>
                       </td>
 
-                      <td class="${point.pointType == 'ORDER_USE' ? 'text-danger' : 'text-success'} fw-bold">
-                          ${point.pointType == 'ORDER_USE' ? '-' : '+'}
+                      <td class="${point.pointType == 'ORDER_USE' ? 'text-danger' : 'text-success'}">
                         <fmt:formatNumber value="${point.amount}" pattern="#,###"/> P
                       </td>
 
                       <td>
                         <c:choose>
-                          <c:when test="${not empty point.orderId}">${point.orderId}</c:when>
-                          <c:otherwise>-</c:otherwise>
+                          <c:when test="${empty point.orderId or point.orderId == 0}">-</c:when>
+                          <c:otherwise>${point.orderId}</c:otherwise>
                         </c:choose>
                       </td>
                     </tr>

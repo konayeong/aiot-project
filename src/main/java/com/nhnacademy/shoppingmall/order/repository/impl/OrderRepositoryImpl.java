@@ -3,6 +3,7 @@ package com.nhnacademy.shoppingmall.order.repository.impl;
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
+import com.nhnacademy.shoppingmall.order.domain.OrderItem;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,5 +87,33 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
 
         return 0L;
+    }
+
+    @Override
+    public List<OrderItem> findOrderDetailsByOrderId(int orderId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        List<OrderItem> details = new ArrayList<>();
+        String sql = "select p.product_name, oi.price, oi.quantity , p.image "+
+                    "from order_items oi " +
+                    "join products p on oi.product_id = p.product_id " +
+                    "where oi.order_id = ?";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setInt(1, orderId);
+            ResultSet rs = pstm.executeQuery();
+
+            while(rs.next()) {
+                details.add(new OrderItem(
+                        rs.getString("product_name"),
+                        rs.getInt("price"),
+                        rs.getInt("quantity"),
+                        rs.getString("image")
+                ));
+            }
+        } catch (SQLException e) {
+            log.error("Order findOrderDetailsByOrderId error", e);
+            throw new RuntimeException(e);
+        }
+        return details;
     }
 }

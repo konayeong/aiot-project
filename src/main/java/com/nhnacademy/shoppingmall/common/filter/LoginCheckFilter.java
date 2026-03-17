@@ -14,7 +14,7 @@ import java.util.Objects;
 @Slf4j
 @WebFilter(
         filterName = "loginCheckFilter",
-        urlPatterns = "/mypage/*"
+        urlPatterns = {"/mypage/*", "/order/*"}
 )
 public class LoginCheckFilter extends HttpFilter {
     @Override

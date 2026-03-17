@@ -73,7 +73,10 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = opUser.get();
-        userRepository.updateLatestLoginAtByUserId(userId, LocalDateTime.now());
+
+        LocalDateTime now = LocalDateTime.now();
+        userRepository.updateLatestLoginAtByUserId(userId, now);
+        user.setLatestLoginAt(now);
 
         return user;
     }

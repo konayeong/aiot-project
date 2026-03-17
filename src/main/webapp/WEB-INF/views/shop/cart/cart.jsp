@@ -63,7 +63,9 @@
                                             </a>
                                         </td>
 
-                                        <td><fmt:formatNumber value="${product.price}" pattern="#,###"/> 원</td>
+                                        <td>
+                                            <fmt:formatNumber value="${product.price}" pattern="#,###"/> 원
+                                        </td>
 
                                         <td>
                                             <form action="/cart/updateAction.do" method="post" class="d-flex justify-content-center align-items-center m-0">
@@ -101,7 +103,7 @@
                     </h4>
                     <div>
                         <a href="/index.do" class="btn btn-outline-secondary btn-lg me-2">쇼핑 계속하기</a>
-                        <a href="#" class="btn btn-primary btn-lg">주문하기</a>
+                        <a href="/order/action.do" class="btn btn-primary btn-lg">주문하기</a>
                     </div>
                 </div>
             </c:if>

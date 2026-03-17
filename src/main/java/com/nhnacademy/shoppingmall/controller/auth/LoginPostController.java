@@ -35,9 +35,11 @@ public class LoginPostController implements BaseController {
         String userPwd = req.getParameter("user_password");
 
         try{
+            User beforeUser = userService.getUser(userId);
+            LocalDateTime lastLoginAt = (beforeUser != null) ? beforeUser.getLatestLoginAt() : null;
+
             User user = userService.doLogin(userId, userPwd);
 
-            LocalDateTime lastLoginAt = user.getLatestLoginAt();
             LocalDate today = LocalDate.now();
 
             if(lastLoginAt == null || lastLoginAt.toLocalDate().isBefore(today)) {
