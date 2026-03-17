@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"
-         trimDirectiveWhitespaces="true" session="false" %>
+         trimDirectiveWhitespaces="true" %>
 
 <div class="container py-5">
 
@@ -67,8 +67,12 @@
                     </ul>
                         <div class="d-grid gap-2">
                             <c:choose>
-                                <%-- 재고가 1개 이상일 때만 장바구니 버튼 활성화 --%>
-                                <c:when test="${product.stock > 0}">
+                                <c:when test="${product.stock <= 0}">
+                                    <button type="button" class="btn btn-danger" disabled>
+                                        품절
+                                    </button>
+                                </c:when>
+                                <c:when test="${not empty sessionScope.loginUser}">
                                     <form id="orderForm">
                                         <input type="hidden" name="product_id" value="${product.productId}">
                                         <div class="mb-4">
@@ -87,12 +91,6 @@
                                         </button>
                                     </form>
                                 </c:when>
-                                <%-- 품절일 경우 클릭 못 하게 막음 --%>
-                                <c:otherwise>
-                                    <button type="button" class="btn btn-danger" disabled>
-                                        품절
-                                    </button>
-                                </c:otherwise>
                             </c:choose>
                         </div>
                 </div>
