@@ -37,7 +37,7 @@
                                 </td>
 
                                 <td class="text-start fw-bold">
-                                    <a href="/product/view.do?product_id=${detail.productId}" class="text-decoration-none text-dark">
+                                    <a href="/products/detail.do?product_id=${detail.productId}" class="text-decoration-none text-dark">
                                             ${detail.productName}
                                     </a>
                                 </td>

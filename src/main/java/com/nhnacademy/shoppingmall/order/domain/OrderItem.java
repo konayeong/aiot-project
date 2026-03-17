@@ -17,7 +17,8 @@ public class OrderItem {
     private String image;
 
     // 생성
-    public OrderItem(String productName, int price, int quantity, String image) {
+    public OrderItem(int productId, String productName, int price, int quantity, String image) {
+        this.productId = productId;
         this.productName = productName;
         this.price = price;
         this.quantity = quantity;

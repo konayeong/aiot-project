@@ -15,13 +15,14 @@ import java.util.List;
 public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public int save(Order order) {
-        String sql = "insert into orders (user_id, address_id, used_point) values(?,?,?)";
+        String sql = "insert into orders (user_id, address_id, used_point, created_at) values(?,?,?,?)";
         Connection connection = DbConnectionThreadLocal.getConnection();
 
         try(PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstm.setString(1, order.getUserId());
             pstm.setInt(2, order.getAddressId());
             pstm.setInt(3, order.getUsedPoint());
+            pstm.setTimestamp(4, Timestamp.valueOf(order.getCreatedAt()));
             pstm.executeUpdate();
 
             ResultSet rs = pstm.getGeneratedKeys();
@@ -93,7 +94,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<OrderItem> findOrderDetailsByOrderId(int orderId) {
         Connection connection = DbConnectionThreadLocal.getConnection();
         List<OrderItem> details = new ArrayList<>();
-        String sql = "select p.product_name, oi.price, oi.quantity , p.image "+
+        String sql = "select p.product_id, p.product_name, oi.price, oi.quantity , p.image "+
                     "from order_items oi " +
                     "join products p on oi.product_id = p.product_id " +
                     "where oi.order_id = ?";
@@ -104,6 +105,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
             while(rs.next()) {
                 details.add(new OrderItem(
+                        rs.getInt("product_id"),
                         rs.getString("product_name"),
                         rs.getInt("price"),
                         rs.getInt("quantity"),
