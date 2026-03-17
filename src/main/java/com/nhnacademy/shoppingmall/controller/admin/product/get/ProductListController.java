@@ -24,7 +24,7 @@ public class ProductListController implements BaseController {
 
         String keyword = req.getParameter("searchKeyword");
         int page = 1;
-        int size = 9;
+        int size = 10;
         if(req.getParameter("page")!=null) {
             page = Integer.parseInt(req.getParameter("page"));
         }

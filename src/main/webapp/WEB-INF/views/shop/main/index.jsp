@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" trimDirectiveWhitespaces="true" %>
 
 <style>
     .custom-pagination .page-link {
@@ -64,6 +65,9 @@
                                 ${category.categoryName}
                         </a>
                     </c:forEach>
+                    <div class="text-end">
+                        <a href="/index.do" class="text-end text-danger">취소</a>
+                    </div>
                 </div>
             </div>
             <div class="d-flex">
@@ -82,37 +86,63 @@
     </form>
 
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 ">
-        <c:forEach var="product" items="${products}">
-            <div class="card-group">
-                <div class="card">
-                    <a href="/products/detail.do?product_id=${product.productId}">
-                        <img src="${product.image}"
-                             class="card-img-top"
-                             style="height:250px; object-fit:cover;"
-                             alt="${product.productName}"
-                             onerror="this.src='/resources/no-image.png'">
-                    </a>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <c:choose>
+            <c:when test="${not empty products}">
+                <c:forEach var="product" items="${products}">
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <a href="/products/detail.do?product_id=${product.productId}">
+                                <img src="${product.image}"
+                                     class="card-img-top"
+                                     style="height:300px; object-fit:cover;"
+                                     alt="${product.productName}"
+                                     onerror="this.src='/resources/no-image.png'">
+                            </a>
 
-                    <div class="card-body">
-                        <h6 class="card-title fw-semibold">
-                                ${product.productName}
-                        </h6>
-                        <p class="cart-text text-black fw-bold mb-2">
-                                ${product.price}원
-                        </p>
-                        <div class="cart-text d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                재고 ${product.stock}
-                            </small>
-                            <c:if test="${product.stock == 0}">
-                                <span class="badge bg-danger">품절</span>
-                            </c:if>
+                            <div class="card-body">
+                                <h6 class="fw-semibold">${product.productName}</h6>
+                                <p class="fw-bold"><fmt:formatNumber value="${product.price}" pattern="#,###"/>원</p>
+                                <c:choose>
+                                    <c:when test="${product.stock > 0}">
+                                        <p class="text-muted">재고 ${product.stock}</p>
+
+                                        <c:if test="${not empty sessionScope.loginUser}">
+                                            <div class="d-flex gap-2">
+                                                <form action="/cart/addAction.do" method="post" class="flex-fill">
+                                                    <input type="hidden" name="product_id" value="${product.productId}">
+                                                    <input type="hidden" name="quantity" value="1">
+
+                                                    <button class="btn btn-outline-dark w-100">
+                                                        장바구니
+                                                    </button>
+                                                </form>
+
+                                                <form action="/orders/direct.do" method="get" class="flex-fill">
+                                                    <input type="hidden" name="product_id" value="${product.productId}">
+                                                    <button class="btn btn-warning w-100">
+                                                        바로주문
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </c:if>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <button class="btn btn-danger w-100" disabled>
+                                            품절
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </c:forEach>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <p class="text-muted">검색하신 상품 ${searchKeyword} 이 없습니다.</p>
+            </c:otherwise>
+        </c:choose>
     </div>
 
 

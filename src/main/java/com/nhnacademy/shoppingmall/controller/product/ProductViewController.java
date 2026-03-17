@@ -67,7 +67,7 @@ public class ProductViewController implements BaseController {
         try {
             String newValue = URLEncoder.encode(String.join("|", recentList), StandardCharsets.UTF_8);
             Cookie cookie = new Cookie("recentProducts", newValue);
-            cookie.setMaxAge(60 * 60 * 24 * 7); // 7일, 브라우저가 관리
+            cookie.setMaxAge(60 * 60 * 24 * 2); // 2일
             cookie.setPath("/");
             resp.addCookie(cookie);
         } catch (Exception e) {

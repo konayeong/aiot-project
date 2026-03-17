@@ -33,6 +33,7 @@ public class SignupPostController implements BaseController {
         LocalDateTime now = LocalDateTime.now();
 
         try {
+            // TODO default point 값을 생성자에서 처리하는게 좋지 않을까??
             User newUser = new User(userId, userName, userPwd, userBirth, User.Auth.ROLE_USER,
                     1_000_000, now, null);
             userService.saveUser(newUser);
