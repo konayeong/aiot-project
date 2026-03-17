@@ -1,18 +1,20 @@
 package com.nhnacademy.shoppingmall.user.repository.impl;
 
 import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 public class UserRepositoryImpl implements UserRepository {
-
     @Override
     public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) {
         /*todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
@@ -189,5 +191,70 @@ public class UserRepositoryImpl implements UserRepository {
             throw new RuntimeException(e);
         }
         return 0;
+    }
+
+    @Override
+    public Page<User> findAll(int page, int pageSize, String userId) {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+
+        List<User> content = new ArrayList<>();
+        int offset = (page - 1) * pageSize;
+        boolean isSearch = userId != null && !userId.isEmpty();
+        String sql;
+
+        if(isSearch) {
+            sql = "select * from users where user_id=? order by created_at desc limit ?, ?";
+        } else {
+            sql = "select * from users order by created_at limit ?, ?";
+        }
+
+        try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+            if(isSearch) {
+                pstm.setString(1, userId);
+                pstm.setInt(2, offset);
+                pstm.setInt(3, pageSize);
+            } else {
+                pstm.setInt(1, offset);
+                pstm.setInt(2, pageSize);
+            }
+
+            ResultSet rs = pstm.executeQuery();
+            while(rs.next()) {
+                content.add(new User(
+                        rs.getString("user_id"),
+                        rs.getString("user_name"),
+                        rs.getString("user_password"),
+                        rs.getString("user_birth"),
+                        User.Auth.valueOf(rs.getString("user_auth")),
+                        rs.getInt("user_point"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("latest_login_at").toLocalDateTime()
+                ));
+            }
+        } catch (SQLException e) {
+            log.error("User findAll error", e);
+            throw new RuntimeException(e);
+        }
+
+        long totalCount = totalCount();
+        return new Page<>(content, totalCount);
+    }
+
+    @Override
+    public long totalCount() {
+        Connection connection = DbConnectionThreadLocal.getConnection();
+        String sql = "select count(*) from users";
+
+        try(PreparedStatement pstm = connection.prepareStatement(sql)) {
+            ResultSet rs = pstm.executeQuery();
+            if(rs.next()) {
+                return rs.getLong(1);
+            }
+        } catch (SQLException e) {
+            log.error("User totalCount error", e);
+            throw new RuntimeException(e);
+        }
+
+        return 0L;
     }
 }
