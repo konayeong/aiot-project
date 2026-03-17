@@ -65,7 +65,7 @@ public class ProductCreateController implements BaseController {
 
         if(categoryIds == null || categoryIds.length == 0) {
             req.setAttribute("error", "카테고리를 최소 1개 선택해야 합니다.");
-
+            // TODO Q 문제 (카테고리를 불러오지 않음)
             return "shop/admin/product_create";
         }
 

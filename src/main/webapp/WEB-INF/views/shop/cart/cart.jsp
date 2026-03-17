@@ -58,7 +58,7 @@
                                         </td>
 
                                         <td class="text-start fw-bold">
-                                            <a href="/product/view.do?product_id=${product.productId}" class="text-decoration-none text-dark">
+                                            <a href="/products/detail.do?product_id=${product.productId}" class="text-decoration-none text-dark">
                                                     ${product.productName}
                                             </a>
                                         </td>
@@ -95,16 +95,17 @@
                     </table>
                 </div>
             </div>
-
             <c:if test="${not empty sessionScope.cart}">
                 <div class="card-footer bg-light p-4 text-end">
                     <h4 class="fw-bold mb-3">
                         총 결제 예상 금액: <span class="text-danger"><fmt:formatNumber value="${totalPrice}" pattern="#,###"/> 원</span>
                     </h4>
-                    <div>
-                        <a href="/index.do" class="btn btn-outline-secondary btn-lg me-2">쇼핑 계속하기</a>
-                        <a href="/order/action.do" class="btn btn-primary btn-lg">주문하기</a>
-                    </div>
+
+                    <a href="/index.do" class="btn btn-outline-secondary me-2">쇼핑 계속하기</a>
+                        <input type="hidden" name="products" value="${products}">
+                        <a href="/orders.do" class="btn btn-warning w-45">
+                            주문하기
+                        </a>
                 </div>
             </c:if>
         </div>

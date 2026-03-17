@@ -45,30 +45,40 @@
                 <label for="product_stock">상품 재고</label>
             </div>
 
-            <div class="form-floating mb-2">
-                <input type="file" name="imageFile">
+            <div class="mb-3">
+                <label for="formFile" class="form-label">상품 이미지</label>
+                <input class="form-control" type="file" id="formFile" name="imageFile">
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-bold">카테고리 선택 (1~3개)</label>
                 <div class="border rounded p-3">
                     <div class="row row-cols-4 g-2">
-                        <c:forEach var="category" items="${categories}">
-                            <div class="col">
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           name="categoryIds"
-                                           value="${category.categoryId}"
-                                           id="category_${category.categoryId}">
+                        <c:choose>
+                            <c:when test="${not empty categories}">
+                                <c:forEach var="category" items="${categories}">
+                                    <div class="col">
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="categoryIds"
+                                                   value="${category.categoryId}"
+                                                   id="category_${category.categoryId}">
 
-                                    <label class="form-check-label"
-                                           for="category_${category.categoryId}">
-                                            ${category.categoryName}
-                                    </label>
-                                </div>
-                            </div>
-                        </c:forEach>
+                                            <label class="form-check-label"
+                                                   for="category_${category.categoryId}">
+                                                    ${category.categoryName}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="text-danger" href="/admin/categories/create.do">
+                                    카테고리를 먼저 등록하세요
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

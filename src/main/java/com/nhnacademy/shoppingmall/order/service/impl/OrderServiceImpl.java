@@ -19,6 +19,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void saveOrder(Order order) {
+        /**
+         * 주문 요청
+         * 재고 및 잔고 확인 -> rollback
+         * (검증통과)
+         * 주문 처리
+         * - order, orderItem 생성
+         * - 상품 재고 차감
+         * - 회원 포인트 차감
+         * - 주문 포인트 적립
+         */
+
         int result = orderRepository.save(order);
         if(result < 1) {
             throw new OrderSaveException(order.getUserId());
