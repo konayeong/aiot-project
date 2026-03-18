@@ -203,9 +203,9 @@ public class UserRepositoryImpl implements UserRepository {
         String sql;
 
         if(isSearch) {
-            sql = "select * from users where user_id=? order by created_at desc limit ?, ?";
+            sql = "select * from users where user_id=? order by user_auth asc, created_at desc limit ?, ?";
         } else {
-            sql = "select * from users order by created_at limit ?, ?";
+            sql = "select * from users order by user_auth asc, created_at limit ?, ?";
         }
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {

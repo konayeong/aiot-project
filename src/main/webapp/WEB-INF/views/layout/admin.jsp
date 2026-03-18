@@ -28,8 +28,8 @@
 
                     <div class="mx-auto">
                         <a class="btn btn-outline-light me-2" href="/admin/products.do">상품</a>
-                        <a class="btn btn-warning" href="/admin/categories.do">카테고리</a>
-                        <a class="btn btn-primary me-2" href="/admin/memberList.do">회원</a>
+                        <a class="btn btn-warning me-2" href="/admin/categories.do">카테고리</a>
+                        <a class="btn btn-primary" href="/admin/memberList.do">회원</a>
                     </div>
 
                     <div>

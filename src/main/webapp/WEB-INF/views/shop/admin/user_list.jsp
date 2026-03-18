@@ -48,7 +48,7 @@
 
     <!-- 회원 목록 -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">상품 목록</h3>
+        <h3 class="mb-0">회원 목록</h3>
     </div>
 
     <table class="table table-borderless table-hover">
@@ -63,6 +63,7 @@
             <th>보유포인트</th>
             <th>가입 날짜</th>
             <th>최근 로그인</th>
+            <th>상세보기</th>
         </tr>
         </thead>
 
@@ -91,6 +92,8 @@
                 <td>${user.createdAt}</td>
 
                 <td>${user.latestLoginAt}</td>
+
+                <td><a href="/admin/memberDetail.do?userId=${user.userId}" class="btn btn-outline-primary">확인</a></td>
             </tr>
         </c:forEach>
         </tbody>
@@ -100,7 +103,7 @@
         <ul class="pagination justify-content-center custom-pagination">
             <c:if test="${currentPage > 1}">
                 <li class="page-item">
-                    <a class="page-link" href="/admin/memberList.dodo?page=${currentPage - 1}&searchUser=${search_keyword}">
+                    <a class="page-link" href="/admin/memberList.do?page=${currentPage - 1}&searchUser=${search_keyword}">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
             </c:if>
