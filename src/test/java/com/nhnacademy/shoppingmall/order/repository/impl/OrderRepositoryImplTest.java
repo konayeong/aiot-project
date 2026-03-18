@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 @Slf4j
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
-public class OrderHistoryRepositoryImplTest {
+public class OrderRepositoryImplTest {
     OrderRepository orderRepository = new OrderRepositoryImpl();
     UserRepository userRepository = new UserRepositoryImpl();
     AddressRepository addressRepository = new AddressRepositoryImpl();

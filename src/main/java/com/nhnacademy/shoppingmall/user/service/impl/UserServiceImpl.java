@@ -1,5 +1,6 @@
 package com.nhnacademy.shoppingmall.user.service.impl;
 
+import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.service.UserService;
@@ -79,5 +80,10 @@ public class UserServiceImpl implements UserService {
         user.setLatestLoginAt(now);
 
         return user;
+    }
+
+    @Override
+    public Page<User> getUsers(int page, int pageSize, String userId) {
+        return userRepository.findAll(page, pageSize, userId);
     }
 }
