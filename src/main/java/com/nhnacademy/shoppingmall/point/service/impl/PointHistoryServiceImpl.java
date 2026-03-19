@@ -7,7 +7,11 @@ import com.nhnacademy.shoppingmall.point.exception.PointHistorySaveException;
 import com.nhnacademy.shoppingmall.point.repository.PointHistoryRepository;
 import com.nhnacademy.shoppingmall.point.service.PointHistoryService;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Service
+@Transactional
 public class PointHistoryServiceImpl implements PointHistoryService {
     private final PointHistoryRepository pointHistoryRepository;
 
@@ -36,6 +40,7 @@ public class PointHistoryServiceImpl implements PointHistoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PointHistory> getPointHistoryPage(String userId, int page, int pageSize) {
         return pointHistoryRepository.findAllByUserId(userId, page, pageSize);
     }

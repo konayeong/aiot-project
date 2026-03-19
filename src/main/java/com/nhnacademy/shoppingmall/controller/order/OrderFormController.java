@@ -12,17 +12,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.GET, value = "/orders.do")
-public class OrderFormController implements BaseController {
-    private final AddressService addressService = new AddressServiceImpl(new AddressRepositoryImpl());
+@Controller
+public class OrderFormController {
+    private final AddressService addressService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public OrderFormController(AddressService addressService) {
+        this.addressService = addressService;
+    }
+
+    @GetMapping("/orders.do")
+    public String execute(HttpServletRequest req,
+                          Model model) {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("loginUser");
 
@@ -38,9 +46,9 @@ public class OrderFormController implements BaseController {
         Map<Integer, CartItem> cartItemMap = (Map<Integer, CartItem>) session.getAttribute("cart");
         List<CartItem> cartItems = cartItemMap.values().stream().toList();
 
-        req.setAttribute("addresses", addressList);
-        req.setAttribute("orderItems", cartItems);
-        req.setAttribute("user", user);
+        model.addAttribute("addresses", addressList);
+        model.addAttribute("orderItems", cartItems);
+        model.addAttribute("user", user);
 
         return "shop/order/order";
     }

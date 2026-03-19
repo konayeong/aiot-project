@@ -1,26 +1,27 @@
 package com.nhnacademy.shoppingmall.controller.admin.category.get;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.product.domain.Category;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductCategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.CategoryService;
-import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/admin/categories/edit.do")
-public class CategoryEditFormController implements BaseController {
-    private final CategoryService categoryService = new CategoryServiceImpl(new CategoryRepositoryImpl(), new ProductCategoryRepositoryImpl());
+@Controller
+public class CategoryEditFormController {
+    private final CategoryService categoryService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        int categoryId = Integer.parseInt(req.getParameter("category_id"));
+    public CategoryEditFormController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("/admin/categories/edit.do")
+    public String execute(@RequestParam(name = "category_id") int categoryId,
+                          Model model) {
 
         Category category = categoryService.getCategory(categoryId);
 
-        req.setAttribute("category", category);
+        model.addAttribute("category", category);
         return "shop/admin/category_edit";
     }
 }

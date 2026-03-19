@@ -1,24 +1,27 @@
 package com.nhnacademy.shoppingmall.controller.admin.user;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.order.domain.OrderItem;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
-import com.nhnacademy.shoppingmall.order.service.impl.OrderServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/admin/orderDetail.do")
-public class AdminOrderDetailController implements BaseController {
-    private final OrderService orderService = new OrderServiceImpl(new OrderRepositoryImpl());
+@Controller
+public class AdminOrderDetailController {
+    private final OrderService orderService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String orderIdStr = req.getParameter("order_id");
-        String userId = req.getParameter("user_id");
+    public AdminOrderDetailController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @GetMapping("/admin/orderDetail.do")
+    public String execute(@RequestParam(name = "order_id") String orderIdStr,
+                          @RequestParam(name = "user_id") String userId,
+                          Model model) {
+
         if(orderIdStr == null || orderIdStr.isEmpty()) {
             return "redirect:/admin/memberDetail.do";
         }
@@ -27,9 +30,9 @@ public class AdminOrderDetailController implements BaseController {
 
         List<OrderItem> orderItemList = orderService.getOrderDetails(orderId);
 
-        req.setAttribute("orderId", orderId);
-        req.setAttribute("orderDetails", orderItemList);
-        req.setAttribute("userId", userId);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("orderDetails", orderItemList);
+        model.addAttribute("userId", userId);
 
         return "shop/admin/user_orderDetail";
     }

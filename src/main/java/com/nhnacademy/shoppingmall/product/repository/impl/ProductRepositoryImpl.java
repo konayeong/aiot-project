@@ -1,22 +1,28 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Product;
 import com.nhnacademy.shoppingmall.product.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Repository
 public class ProductRepositoryImpl implements ProductRepository {
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public long totalCount(String productName) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         boolean isSearch = productName != null && !productName.isEmpty();
         String sql;
@@ -39,6 +45,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0L;
@@ -46,7 +54,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public long totalCount(int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as totalCount from products p join product_categories pc on p.product_id = pc.product_id where pc.category_id = ?";
 
@@ -60,13 +68,15 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0L;
     }
 
     @Override
     public Page<Product> findAll(int page, int size, String productName) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         int offset = (page-1) * size;
         boolean isSearch = productName != null && !productName.isEmpty();
@@ -109,12 +119,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public Page<Product> findAllByCategoryId(int page, int size, int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         int offset = (page-1) * size;
         String sql = "select * from products p join product_categories pc on p.product_id = pc.product_id where pc.category_id = ? order by p.product_id limit ?, ?";
@@ -143,13 +155,15 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     // === CRUD ===
     @Override
     public Optional<Product> findById(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select * from products where product_id = ?";
 
@@ -173,13 +187,15 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return Optional.empty();
     }
 
     @Override
     public int save(Product product) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "insert into products(product_name, description, price, stock, image) values (?,?,?,?,?)";
 
@@ -202,12 +218,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int update(Product product) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "update products set product_name = ?, description = ?, price = ?, stock = ?, image = ? where product_id = ?";
 
@@ -224,12 +242,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int deleteByProductId(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from products where product_id = ?";
 
@@ -241,12 +261,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int deleteAll() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from products";
 
@@ -257,12 +279,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int countByProductId(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as cnt from products where product_id = ?";
 
@@ -276,13 +300,15 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0;
     }
 
     @Override
     public int countByProductName(String productName) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as cnt from products where product_name = ?";
 
@@ -296,6 +322,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0;
     }

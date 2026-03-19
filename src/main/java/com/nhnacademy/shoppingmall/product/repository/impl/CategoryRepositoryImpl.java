@@ -1,20 +1,27 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Repository
 public class CategoryRepositoryImpl implements CategoryRepository {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public List<Category> findAll() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select * from categories order by category_id";
 
@@ -34,12 +41,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public Optional<Category> findById(int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select * from categories where category_id = ?";
 
@@ -60,13 +69,15 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return Optional.empty();
     }
 
     @Override
     public int save(Category category) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "insert into categories(category_name, sort_order) values (?,?)";
 
@@ -87,12 +98,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int update(Category category) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "update categories set category_name = ?, sort_order = ? where category_id = ?";
 
@@ -106,12 +119,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int deleteByCategoryId(int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from categories where category_id = ?";
 
@@ -124,12 +139,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int deleteAll() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from categories";
 
@@ -140,12 +157,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int countByCategoryId(int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as cnt from categories where category_id = ?";
 
@@ -161,13 +180,15 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0;
     }
 
     @Override
     public int countByCategoryNameOrSortOrder(String categoryName, int sortOrder) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as cnt from categories where category_name = ? or sort_order = ?";
 
@@ -182,6 +203,8 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0;
     }

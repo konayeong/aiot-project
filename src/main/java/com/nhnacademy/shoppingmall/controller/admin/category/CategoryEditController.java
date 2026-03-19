@@ -1,25 +1,23 @@
 package com.nhnacademy.shoppingmall.controller.admin.category;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.product.domain.Category;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductCategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.CategoryService;
-import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping(method = RequestMapping.Method.POST, value = "/admin/categories/edit.do")
-public class CategoryEditController implements BaseController {
-    private final CategoryService categoryService = new CategoryServiceImpl(new CategoryRepositoryImpl(), new ProductCategoryRepositoryImpl());
+@Controller
+public class CategoryEditController {
+    private final CategoryService categoryService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        int categoryId = Integer.parseInt(req.getParameter("category_id"));
-        String categoryName = req.getParameter("category_name");
-        int sortOrder = Integer.parseInt(req.getParameter("sort_order"));
+    public CategoryEditController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
+    @PostMapping("/admin/categories/edit.do")
+    public String execute(@RequestParam(name = "category_id") int categoryId,
+                          @RequestParam(name = "category_name") String categoryName,
+                          @RequestParam(name = "sort_order") int sortOrder) {
         categoryService.updateCategory(new Category(categoryId, categoryName, sortOrder));
 
         return "redirect:/admin/categories.do";

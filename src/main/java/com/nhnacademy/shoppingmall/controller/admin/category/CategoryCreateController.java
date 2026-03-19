@@ -1,29 +1,29 @@
 package com.nhnacademy.shoppingmall.controller.admin.category;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.exception.CategoryAlreadyExistsException;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductCategoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.CategoryService;
-import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping(method = RequestMapping.Method.POST, value = "/admin/categories/create.do")
-public class CategoryCreateController implements BaseController {
-    private final CategoryService categoryService = new CategoryServiceImpl(new CategoryRepositoryImpl(), new ProductCategoryRepositoryImpl());
+@Controller
+public class CategoryCreateController {
+    private final CategoryService categoryService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String categoryName = req.getParameter("category_name");
-        int sortOrder = Integer.parseInt(req.getParameter("sort_order"));
+    public CategoryCreateController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
+    @PostMapping("/admin/categories/create.do")
+    public String execute(@RequestParam(name = "category_name") String categoryName,
+                          @RequestParam(name = "sort_order") int sortOrder,
+                          Model model) {
         try {
             categoryService.saveCategory(new Category(categoryName, sortOrder));
         }catch (CategoryAlreadyExistsException e) {
-            req.setAttribute("error", "이미 등록된 상품입니다.");
+            model.addAttribute("error", "이미 등록된 상품입니다.");
             return "shop/admin/category_create";
         }
         return "redirect:/admin/categories.do";

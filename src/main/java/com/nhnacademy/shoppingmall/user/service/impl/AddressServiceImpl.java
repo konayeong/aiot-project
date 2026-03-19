@@ -6,9 +6,13 @@ import com.nhnacademy.shoppingmall.user.exception.AddressSaveException;
 import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.repository.AddressRepository;
 import com.nhnacademy.shoppingmall.user.service.AddressService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
@@ -45,6 +49,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Address> getAddressesByUserId(String userId) {
         return addressRepository.findAllByUserId(userId);
     }

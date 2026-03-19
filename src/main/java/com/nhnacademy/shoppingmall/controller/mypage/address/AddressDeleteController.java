@@ -1,24 +1,26 @@
 package com.nhnacademy.shoppingmall.controller.mypage.address;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.user.domain.User;
-import com.nhnacademy.shoppingmall.user.repository.impl.AddressRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.AddressService;
-import com.nhnacademy.shoppingmall.user.service.impl.AddressServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping(method = RequestMapping.Method.POST, value = "/mypage/addressDeleteAction.do")
-public class AddressDeleteController implements BaseController {
-    private final AddressService addressService = new AddressServiceImpl(new AddressRepositoryImpl());
+@Controller
+public class AddressDeleteController {
+    private final AddressService addressService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public AddressDeleteController(AddressService addressService) {
+        this.addressService = addressService;
+    }
+
+    @PostMapping("/mypage/addressDeleteAction.do")
+    public String execute(HttpServletRequest req,
+                          @RequestParam("address_id") String addressIdStr) {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("loginUser");
-        String addressIdStr = req.getParameter("address_id");
 
         if(addressIdStr != null && !addressIdStr.isEmpty()) {
             int addressId = Integer.parseInt(addressIdStr);

@@ -1,21 +1,20 @@
 package com.nhnacademy.shoppingmall.common.listener;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
-import jakarta.servlet.annotation.WebListener;
 import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Slf4j
-@WebListener
+@Component
 public class ApplicationListener implements ServletContextListener {
     private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
     @Override
@@ -23,8 +22,6 @@ public class ApplicationListener implements ServletContextListener {
         //todo#12 application 시작시 테스트 계정인 admin,user 등록합니다. 만약 존재하면 등록하지 않습니다.
 
         try{
-            DbConnectionThreadLocal.initialize();
-
             User admin = new User(
                     "admin", "관리자", "12345", "20030627", User.Auth.ROLE_ADMIN, 1_000_000, LocalDateTime.now(), null
             );
@@ -36,9 +33,6 @@ public class ApplicationListener implements ServletContextListener {
             saveUser(user);
 
         }catch (Exception e) {
-            DbConnectionThreadLocal.setSqlError(true);
-        }finally {
-            DbConnectionThreadLocal.reset();
         }
     }
 

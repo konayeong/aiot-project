@@ -6,10 +6,14 @@ import com.nhnacademy.shoppingmall.user.exception.UserNotFoundException;
 import com.nhnacademy.shoppingmall.user.service.UserService;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -18,6 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getUser(String userId){
         //todo#4-1 회원조회
         Optional<User> opUser = userRepository.findById(userId);
@@ -83,6 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<User> getUsers(int page, int pageSize, String userId) {
         return userRepository.findAll(page, pageSize, userId);
     }

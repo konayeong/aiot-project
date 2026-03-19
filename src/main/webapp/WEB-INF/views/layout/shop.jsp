@@ -48,7 +48,9 @@
                             <c:when test="${not empty sessionScope.loginUser}">
                                 <span class="text-white me-3 fw-bold">${sessionScope.loginUser.userName}님</span>
                                 <span class="text-white me-3">Point: <fmt:formatNumber value="${sessionScope.loginUser.userPoint}" pattern="#,###"/>P</span>
-                                <a class="btn btn-outline-light me-2" href="/logout.do">로그아웃</a>
+                                <form action="/logout.do" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-light me-2">로그아웃</button>
+                                </form>
                                 <form action="/mypage/withdrawalAction.do" method="post" style="display:inline;">
                                     <button type="submit" class="btn btn-outline-danger me-2" onclick="return confirm('정말로 탈퇴하시겠습니까?');">회원탈퇴</button>
                                 </form>
@@ -68,7 +70,7 @@
         <main>
             <div class="album py-5 bg-light">
                 <div class="container">
-                    <jsp:include page="${layout_content_holder}" />
+                    <jsp:include page="/WEB-INF/views/${layout_content_holder}.jsp" />
                 </div>
             </div>
 

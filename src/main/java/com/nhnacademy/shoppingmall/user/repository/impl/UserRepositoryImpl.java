@@ -1,11 +1,14 @@
 package com.nhnacademy.shoppingmall.user.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,13 +17,18 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
+@Repository
 public class UserRepositoryImpl implements UserRepository {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public Optional<User> findByUserIdAndUserPassword(String userId, String userPassword) {
         /*todo#3-1 회원의 아이디와 비밀번호를 이용해서 조회하는 코드 입니다.(로그인)
           해당 코드는 SQL Injection이 발생합니다. SQL Injection이 발생하지 않도록 수정하세요.
          */
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+
 //        String sql =String.format("select user_id, user_name, user_password, user_birth, user_auth, user_point, created_at, latest_login_at from users where user_id='%s' and user_password ='%s'",
 //                userId,
 //                userPassword
@@ -51,6 +59,8 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return Optional.empty();
@@ -59,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findById(String userId) {
         //todo#3-2 회원조회
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select * from users where user_id = ?";
 
@@ -81,6 +91,8 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return Optional.empty();
     }
@@ -88,7 +100,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public int save(User user) {
         //todo#3-3 회원등록, executeUpdate()을 반환합니다.
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "insert into users(user_id, user_name, user_password, user_birth, user_auth, user_point, created_at, latest_login_at)" +
                 " values(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -109,13 +121,15 @@ public class UserRepositoryImpl implements UserRepository {
            return result;
        } catch (SQLException e) {
            throw new RuntimeException(e);
+       } finally {
+           DataSourceUtils.releaseConnection(connection, dataSource);
        }
     }
 
     @Override
     public int deleteByUserId(String userId) {
         //todo#3-4 회원삭제, executeUpdate()을 반환합니다.
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from users where user_id = ?";
 
@@ -127,13 +141,15 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int update(User user) {
         //todo#3-5 회원수정, executeUpdate()을 반환합니다.
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "update users set user_name = ?, user_password = ?, user_birth = ?, user_auth = ?, user_point = ? where user_id = ?";
 
@@ -150,13 +166,15 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int updateLatestLoginAtByUserId(String userId, LocalDateTime latestLoginAt) {
         //todo#3-6, 마지막 로그인 시간 업데이트, executeUpdate()을 반환합니다.
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "update users set latest_login_at = ? where user_id = ?";
 
@@ -169,13 +187,15 @@ public class UserRepositoryImpl implements UserRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int countByUserId(String userId) {
         //todo#3-7 userId와 일치하는 회원의 count를 반환합니다.
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select count(*) as user_cnt from users where user_id = ?";
 
@@ -189,13 +209,15 @@ public class UserRepositoryImpl implements UserRepository {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return 0;
     }
 
     @Override
     public Page<User> findAll(int page, int pageSize, String userId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         List<User> content = new ArrayList<>();
         int offset = (page - 1) * pageSize;
@@ -234,6 +256,8 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException e) {
             log.error("User findAll error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         long totalCount = totalCount();
@@ -242,7 +266,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public long totalCount() {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
         String sql = "select count(*) from users";
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -253,6 +277,8 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException e) {
             log.error("User totalCount error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0L;

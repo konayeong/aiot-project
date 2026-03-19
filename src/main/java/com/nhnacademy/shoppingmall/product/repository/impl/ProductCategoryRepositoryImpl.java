@@ -1,10 +1,13 @@
 package com.nhnacademy.shoppingmall.product.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.repository.ProductCategoryRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Repository
 public class ProductCategoryRepositoryImpl implements ProductCategoryRepository {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public List<Category> getByProductId(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select c.category_id as categoryId, c.category_name as categoryName, c.sort_order as sortOrder" +
                 " from product_categories pc join categories c on pc.category_id = c.category_id" +
@@ -39,12 +46,14 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public List<Integer> getCategoryIdsByProductId(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "select category_id from product_categories where product_id = ? order by category_id";
 
@@ -60,12 +69,14 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int save(int productId, int categoryId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "insert into product_categories(product_id, category_id) values(?,?)";
 
@@ -78,12 +89,14 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public int deleteByProductId(int productId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from product_categories where product_id = ?";
 
@@ -95,6 +108,8 @@ public class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 }

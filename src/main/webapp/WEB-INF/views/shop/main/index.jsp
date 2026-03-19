@@ -37,8 +37,7 @@
                                 <img src="${recentProduct.image}"
                                      class="card-img-top"
                                      style="height:150px; object-fit:cover;"
-                                     alt="${recentProduct.productName}"
-                                     onerror="this.src='/resources/no-image.png'">
+                                     alt="${recentProduct.productName}">
                             </a>
                             <div class="card-body text-center">
                                 <p class="card-text fw-bold">${recentProduct.productName}</p>
@@ -96,8 +95,7 @@
                                 <img src="${product.image}"
                                      class="card-img-top"
                                      style="height:300px; object-fit:cover;"
-                                     alt="${product.productName}"
-                                     onerror="this.src='/resources/no-image.png'">
+                                     alt="${product.productName}">
                             </a>
 
                             <div class="card-body">

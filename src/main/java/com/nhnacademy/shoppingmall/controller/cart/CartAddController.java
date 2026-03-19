@@ -13,22 +13,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/cart/addAction.do")
-public class CartAddController implements BaseController {
-    ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl(), new ProductCategoryRepositoryImpl(), new CategoryRepositoryImpl());
+@Controller
+public class CartAddController{
+    private final ProductService productService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        int productId = Integer.parseInt(req.getParameter("product_id"));
+    public CartAddController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @PostMapping("/cart/addAction.do")
+    public String execute(@RequestParam("product_id") int productId,
+                          @RequestParam("quantity") int quantity,
+                          HttpSession session) {
         Product product = productService.getProduct(productId);
-        int quantity = Integer.parseInt(req.getParameter("quantity"));
-
-        HttpSession session = req.getSession(true);
 
         Map<Integer, CartItem> cart = (Map<Integer, CartItem>) session.getAttribute("cart");
         if(cart == null) {

@@ -16,24 +16,32 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST,value = "/loginAction.do")
-public class LoginPostController implements BaseController {
+@Controller
+public class LoginPostController {
 
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-    private final PointHistoryService pointService = new PointHistoryServiceImpl(new PointHistoryRepositoryImpl());
+    private final UserService userService;
+    private final PointHistoryService pointService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public LoginPostController(UserService userService, PointHistoryService pointService) {
+        this.userService = userService;
+        this.pointService = pointService;
+    }
+
+    @PostMapping("/loginAction.do")
+    public String execute(@RequestParam(name = "user_id") String userId,
+                          @RequestParam(name = "user_password") String userPwd,
+                          HttpSession session,
+                          Model model) {
         //todo#13-2 로그인 구현, session은 60분동안 유지됩니다.
-
-        String userId = req.getParameter("user_id");
-        String userPwd = req.getParameter("user_password");
-
         try{
             User beforeUser = userService.getUser(userId);
             LocalDateTime lastLoginAt = (beforeUser != null) ? beforeUser.getLatestLoginAt() : null;
@@ -51,7 +59,6 @@ public class LoginPostController implements BaseController {
                 ));
                 log.info("Daily first login point(10,000) rewarded to user: {}", userId);
             }
-            HttpSession session = req.getSession(true);
 
             session.setMaxInactiveInterval(60 * 60);
             session.setAttribute("loginUser", user);
@@ -60,7 +67,7 @@ public class LoginPostController implements BaseController {
             return "redirect:/index.do";
 
         }catch (UserNotFoundException e) {
-            req.setAttribute("errorMessage", "아이디와 비밀번호가 일치하지 않습니다.");
+            model.addAttribute("errorMessage", "아이디와 비밀번호가 일치하지 않습니다.");
             return "shop/login/login_form";
         }
 

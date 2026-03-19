@@ -1,23 +1,17 @@
 package com.nhnacademy.shoppingmall.controller.index;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
-
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.product.domain.Category;
 import com.nhnacademy.shoppingmall.product.domain.Product;
-import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
-import com.nhnacademy.shoppingmall.product.repository.impl.CategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductCategoryRepositoryImpl;
-import com.nhnacademy.shoppingmall.product.repository.impl.ProductRepositoryImpl;
 import com.nhnacademy.shoppingmall.product.service.CategoryService;
 import com.nhnacademy.shoppingmall.product.service.ProductService;
-import com.nhnacademy.shoppingmall.product.service.impl.CategoryServiceImpl;
-import com.nhnacademy.shoppingmall.product.service.impl.ProductServiceImpl;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -25,48 +19,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.GET,value = {"/index.do"})
-public class IndexController implements BaseController {
-    private final ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl(), new ProductCategoryRepositoryImpl(), new CategoryRepositoryImpl());
-    private final CategoryService categoryService = new CategoryServiceImpl(new CategoryRepositoryImpl(), new ProductCategoryRepositoryImpl());
+@Controller
+public class IndexController {
+    private final ProductService productService;
+    private final CategoryService categoryService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public IndexController(ProductService productService,
+                           CategoryService categoryService) {
+        this.productService = productService;
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("/index.do")
+    public String execute(
+            @CookieValue(value = "recentProducts", required = false) Cookie cookie,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "category_id", required = false) String categoryId,
+            @RequestParam(value = "searchKeyword", required = false) String keyword,
+            Model model
+
+    ) {
         // == 최근 본 상품 == //
         List<Product> recentProducts = new ArrayList<>();
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("recentProducts".equals(cookie.getName())) {
-                    try {
-                        String decoded = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                        String[] ids = decoded.split("\\|");
-                        for(String id : ids){
-                            Product p = productService.getProduct(Integer.parseInt(id));
-                            if(p != null) recentProducts.add(p);
-                        }
-                    } catch(Exception e) {
-                        throw new RuntimeException(e);
+
+        if(cookie != null) {
+            try {
+                String decoded = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                String[] ids = decoded.split("\\|");
+                for(String id : ids){
+                    Product p = productService.getProduct(Integer.parseInt(id));
+                    if(p != null) {
+                        recentProducts.add(p);
                     }
-                    break;
                 }
+            } catch(Exception e) {
+                throw new RuntimeException(e);
             }
         }
 
-        req.setAttribute("recentProducts", recentProducts);
+        model.addAttribute("recentProducts", recentProducts);
 
         // == 페이지네이션 == //
-        int page = 1;
         int size = 12;
-        String pageParam = req.getParameter("page");
-        if (pageParam != null && !pageParam.isEmpty()) {
-            page = Integer.parseInt(pageParam);
-        }
         Page<Product> productPage;
 
         // 카테고리 선택 -> keyword 무시
-        String categoryId = req.getParameter("category_id");
-        String keyword = req.getParameter("searchKeyword");
         if(categoryId != null) {
             productPage = productService.getProductsByCategoryId(page, size, Integer.parseInt(categoryId));
         }else {
@@ -81,12 +78,12 @@ public class IndexController implements BaseController {
         long totalCount = productPage.getTotalCount();
         int totalPages = (int) Math.ceil((double) totalCount / size);
 
-        req.setAttribute("products", productPage.getContent());
-        req.setAttribute("categories", categories);
-        req.setAttribute("currentPage", page);
-        req.setAttribute("totalPages", totalPages);
-        req.setAttribute("searchKeyword", keyword);
-        req.setAttribute("click", (categoryId!=null) ? Integer.parseInt(categoryId) : null);
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("categories", categories);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("searchKeyword", keyword);
+        model.addAttribute("click", (categoryId!=null) ? Integer.parseInt(categoryId) : null);
 
         return "shop/main/index";
     }

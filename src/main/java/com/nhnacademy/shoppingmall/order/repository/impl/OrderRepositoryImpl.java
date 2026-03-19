@@ -1,22 +1,29 @@
 package com.nhnacademy.shoppingmall.order.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.order.domain.Order;
 import com.nhnacademy.shoppingmall.order.domain.OrderItem;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Repository
 public class OrderRepositoryImpl implements OrderRepository {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public int save(Order order) {
         String sql = "insert into orders (user_id, address_id, used_point, created_at) values(?,?,?,?)";
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         try(PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstm.setString(1, order.getUserId());
@@ -33,6 +40,8 @@ public class OrderRepositoryImpl implements OrderRepository {
         } catch (SQLException e) {
             log.error("Order save error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0;
@@ -40,7 +49,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Page<Order> findAllByUserId(String userId, int page, int pageSize) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         List<Order> content = new ArrayList<>();
         int offset = (page - 1) * pageSize;
@@ -64,6 +73,8 @@ public class OrderRepositoryImpl implements OrderRepository {
         } catch (SQLException e) {
             log.error("Order findAllByUserId error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         long totalCount = totalCountByUserId(userId);
@@ -73,7 +84,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public long totalCountByUserId(String userId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+
         String sql = "select count(*) from orders where user_id=?";
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -85,6 +97,8 @@ public class OrderRepositoryImpl implements OrderRepository {
         } catch (SQLException e) {
             log.error("Order totalCountByUserId error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0L;
@@ -92,7 +106,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<OrderItem> findOrderDetailsByOrderId(int orderId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+
         List<OrderItem> details = new ArrayList<>();
         String sql = "select p.product_id, p.product_name, oi.price, oi.quantity , p.image "+
                     "from order_items oi " +
@@ -115,6 +130,8 @@ public class OrderRepositoryImpl implements OrderRepository {
         } catch (SQLException e) {
             log.error("Order findOrderDetailsByOrderId error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
         return details;
     }

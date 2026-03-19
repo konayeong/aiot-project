@@ -18,6 +18,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,13 +29,21 @@ import java.util.List;
 import java.util.Queue;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.GET, value = "/orders/direct.do")
-public class OrderDirectFormController implements BaseController {
-    private final AddressService addressService = new AddressServiceImpl(new AddressRepositoryImpl());
-    private final ProductService productService = new ProductServiceImpl(new ProductRepositoryImpl(), new ProductCategoryRepositoryImpl(), new CategoryRepositoryImpl());
+@Controller
+public class OrderDirectFormController {
+    private final AddressService addressService;
+    private final ProductService productService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    public OrderDirectFormController(AddressService addressService, ProductService productService) {
+        this.addressService = addressService;
+        this.productService = productService;
+    }
+
+    @GetMapping("/orders/direct.do")
+    public String execute(HttpServletRequest req,
+                          @RequestParam(name = "product_id") int productId,
+                          @RequestParam(name = "quantity", defaultValue = "1") int quantity,
+                          Model model) {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("loginUser");
 
@@ -44,14 +56,13 @@ public class OrderDirectFormController implements BaseController {
         List<Address> addressList = addressService.getAddressesByUserId(user.getUserId());
 
         // 제품
-        Product product = productService.getProduct(Integer.parseInt(req.getParameter("product_id")));
-        int quantity = req.getParameter("quantity") == null ? 1 : Integer.parseInt(req.getParameter("quantity"));
+        Product product = productService.getProduct(productId);
 
         List<CartItem> items = Collections.singletonList(new CartItem(product, quantity));
 
-        req.setAttribute("addresses", addressList);
-        req.setAttribute("orderItems", items);
-        req.setAttribute("user", user);
+        model.addAttribute("addresses", addressList);
+        model.addAttribute("orderItems", items);
+        model.addAttribute("user", user);
 
         return "/shop/order/order";
     }

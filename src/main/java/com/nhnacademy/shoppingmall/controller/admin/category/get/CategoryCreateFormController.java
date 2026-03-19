@@ -1,16 +1,13 @@
 package com.nhnacademy.shoppingmall.controller.admin.category.get;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/admin/categories/create.do")
-public class CategoryCreateFormController implements BaseController {
+@Controller
+public class CategoryCreateFormController{
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-
+    @GetMapping("/admin/categories/create.do")
+    public String execute() {
         return "shop/admin/category_create";
     }
 }

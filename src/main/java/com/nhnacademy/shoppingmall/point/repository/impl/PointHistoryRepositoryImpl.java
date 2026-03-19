@@ -1,22 +1,29 @@
 package com.nhnacademy.shoppingmall.point.repository.impl;
 
-import com.nhnacademy.shoppingmall.common.mvc.transaction.DbConnectionThreadLocal;
 import com.nhnacademy.shoppingmall.common.page.Page;
 import com.nhnacademy.shoppingmall.point.domain.PointHistory;
 import com.nhnacademy.shoppingmall.point.repository.PointHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Slf4j
+@Repository
 public class PointHistoryRepositoryImpl implements PointHistoryRepository {
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public int save(PointHistory pointHistory) {
         String sql = "insert into point_history (user_id, order_id, point_type, amount, created_at) values (?,?,?,?,?)";
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         try(PreparedStatement psmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             psmt.setString(1, pointHistory.getUserId());
@@ -40,6 +47,8 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
         } catch (SQLException e) {
             log.error("PointHistory save error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0;
@@ -47,7 +56,7 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
 
     @Override
     public int deleteByUserId(String userId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         String sql = "delete from point_history where user_id=?";
 
@@ -59,12 +68,14 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 
     @Override
     public Page<PointHistory> findAllByUserId(String userId, int page, int pageSize) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
 
         List<PointHistory> content = new ArrayList<>();
         int offset = (page - 1) * pageSize;
@@ -89,6 +100,8 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
         } catch (SQLException e) {
             log.error("PointHistory findAllByUserId error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         long totalCount = totalCountByUserId(userId);
@@ -98,7 +111,8 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
 
     @Override
     public long totalCountByUserId(String userId) {
-        Connection connection = DbConnectionThreadLocal.getConnection();
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+
         String sql = "select count(*) from point_history where user_id=?";
 
         try(PreparedStatement pstm = connection.prepareStatement(sql)) {
@@ -110,6 +124,8 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepository {
         } catch (SQLException e) {
             log.error("PointHistory totalCountByUserId error", e);
             throw new RuntimeException(e);
+        } finally {
+            DataSourceUtils.releaseConnection(connection, dataSource);
         }
 
         return 0L;

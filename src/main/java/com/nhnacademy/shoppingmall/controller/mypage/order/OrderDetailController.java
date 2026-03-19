@@ -1,23 +1,25 @@
 package com.nhnacademy.shoppingmall.controller.mypage.order;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.order.domain.OrderItem;
-import com.nhnacademy.shoppingmall.order.repository.impl.OrderRepositoryImpl;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
-import com.nhnacademy.shoppingmall.order.service.impl.OrderServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/mypage/order_detail.do")
-public class OrderDetailController implements BaseController {
-    private final OrderService orderService = new OrderServiceImpl(new OrderRepositoryImpl());
+@Controller
+public class OrderDetailController {
+    private final OrderService orderService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String orderIdStr = req.getParameter("order_id");
+    public OrderDetailController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @GetMapping("/mypage/order_detail.do")
+    public String execute(@RequestParam("orderId") String orderIdStr,
+                          Model model) {
         if(orderIdStr == null || orderIdStr.isEmpty()) {
             return "redirect:/mypage/order.do";
         }
@@ -26,8 +28,8 @@ public class OrderDetailController implements BaseController {
 
         List<OrderItem> orderItemList = orderService.getOrderDetails(orderId);
 
-        req.setAttribute("orderId", orderId);
-        req.setAttribute("orderDetails", orderItemList);
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("orderDetails", orderItemList);
 
         return "shop/mypage/order_detail";
     }

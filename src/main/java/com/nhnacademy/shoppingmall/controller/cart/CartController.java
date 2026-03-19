@@ -1,15 +1,13 @@
 package com.nhnacademy.shoppingmall.controller.cart;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RequestMapping(method = RequestMapping.Method.GET, value = "/cart.do")
-public class CartController implements BaseController {
+@Controller
+public class CartController {
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
+    @GetMapping("/cart.do")
+    public String execute() {
         return "shop/cart/cart";
     }
 }

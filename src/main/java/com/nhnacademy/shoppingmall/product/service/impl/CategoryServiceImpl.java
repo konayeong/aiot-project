@@ -6,10 +6,14 @@ import com.nhnacademy.shoppingmall.product.exception.CategoryNotFoundException;
 import com.nhnacademy.shoppingmall.product.repository.CategoryRepository;
 import com.nhnacademy.shoppingmall.product.repository.ProductCategoryRepository;
 import com.nhnacademy.shoppingmall.product.service.CategoryService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductCategoryRepository productCategoryRepository;
@@ -20,21 +24,25 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Category> getCategories() {
         return categoryRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Category> getCategoriesByProductId(int productId) {
         return productCategoryRepository.getByProductId(productId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Integer> getCategoryIdsByProductId(int productId) {
         return productCategoryRepository.getCategoryIdsByProductId(productId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Category getCategory(int categoryId) {
         Optional<Category> category = categoryRepository.findById(categoryId);
 

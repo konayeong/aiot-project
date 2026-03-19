@@ -1,35 +1,35 @@
 package com.nhnacademy.shoppingmall.controller.auth;
 
-import com.nhnacademy.shoppingmall.common.mvc.annotation.RequestMapping;
-import com.nhnacademy.shoppingmall.common.mvc.controller.BaseController;
 import com.nhnacademy.shoppingmall.point.domain.PointHistory;
-import com.nhnacademy.shoppingmall.point.repository.PointHistoryRepository;
-import com.nhnacademy.shoppingmall.point.repository.impl.PointHistoryRepositoryImpl;
 import com.nhnacademy.shoppingmall.point.service.PointHistoryService;
-import com.nhnacademy.shoppingmall.point.service.impl.PointHistoryServiceImpl;
 import com.nhnacademy.shoppingmall.user.domain.User;
 import com.nhnacademy.shoppingmall.user.exception.UserAlreadyExistsException;
-import com.nhnacademy.shoppingmall.user.repository.impl.UserRepositoryImpl;
 import com.nhnacademy.shoppingmall.user.service.UserService;
-import com.nhnacademy.shoppingmall.user.service.impl.UserServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
 @Slf4j
-@RequestMapping(method = RequestMapping.Method.POST, value = "/signupAction.do")
-public class SignupPostController implements BaseController {
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-    private final PointHistoryService pointService = new PointHistoryServiceImpl(new PointHistoryRepositoryImpl());
+@Controller
+public class SignupPostController{
+    private final UserService userService;
+    private final PointHistoryService pointService;
 
-    @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String userId = req.getParameter("user_id");
-        String userName = req.getParameter("user_name");
-        String userPwd = req.getParameter("user_password");
-        String userBirth = req.getParameter("user_birth");
+    public SignupPostController(UserService userService, PointHistoryService pointService) {
+        this.userService = userService;
+        this.pointService = pointService;
+    }
+
+    @PostMapping("/signupAction.do")
+    public String execute(@RequestParam("user_id") String userId,
+                          @RequestParam("user_name") String userName,
+                          @RequestParam("user_password") String userPwd,
+                          @RequestParam("user_birth") String userBirth,
+                          Model model) {
         LocalDateTime now = LocalDateTime.now();
 
         try {
@@ -46,7 +46,7 @@ public class SignupPostController implements BaseController {
             return "redirect:/login.do";
         } catch (UserAlreadyExistsException e) {
             log.error("Signup Failed (Duplicate ID): {}", userId);
-            req.setAttribute("errorMessage", "이미 존재하는 아이디 입니다.");
+            model.addAttribute("errorMessage", "이미 존재하는 아이디 입니다.");
             return "shop/login/signup_form";
         } catch (Exception e) {
             log.error("Signup Failed", e);

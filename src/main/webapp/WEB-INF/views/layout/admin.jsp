@@ -32,9 +32,9 @@
                         <a class="btn btn-primary" href="/admin/memberList.do">회원</a>
                     </div>
 
-                    <div>
-                        <a class="btn btn-outline-light" href="/logout.do">로그아웃</a>
-                    </div>
+                    <form action="/logout.do" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-outline-light me-2">로그아웃</button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -42,7 +42,7 @@
         <main>
             <div class="album py-5 bg-light">
                 <div class="container">
-                    <jsp:include page="${layout_content_holder}" />
+                    <jsp:include page="/WEB-INF/views/${layout_content_holder}.jsp" />                </div>
                 </div>
             </div>
 

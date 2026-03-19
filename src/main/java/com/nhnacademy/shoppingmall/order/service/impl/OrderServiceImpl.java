@@ -6,10 +6,13 @@ import com.nhnacademy.shoppingmall.order.domain.OrderItem;
 import com.nhnacademy.shoppingmall.order.exception.OrderSaveException;
 import com.nhnacademy.shoppingmall.order.repository.OrderRepository;
 import com.nhnacademy.shoppingmall.order.service.OrderService;
-import com.nhnacademy.shoppingmall.point.service.impl.PointHistoryServiceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
@@ -37,11 +40,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Order> getOrderPage(String userId, int page, int pageSize) {
         return orderRepository.findAllByUserId(userId, page, pageSize);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderItem> getOrderDetails(int orderId) {
         return orderRepository.findOrderDetailsByOrderId(orderId);
     }
